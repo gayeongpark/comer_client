@@ -1499,8 +1499,11 @@ export default function EditPost() {
                       name="cancel1"
                       type="radio"
                       checked={cancellation1}
-                      onChange={() => setCancellation1(true)}
-                      onClick={() => setCancellation1(!cancellation1)}
+                      onChange={() => {
+                        setCancellation1(true);
+                        setCancellation2(false); // Uncheck the other option
+                      }}
+                      // onClick={() => setCancellation1(!cancellation1)}
                       className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-600"
                     />
                     <label
@@ -1519,8 +1522,11 @@ export default function EditPost() {
                       name="cancel2"
                       type="radio"
                       checked={cancellation2}
-                      onChange={() => setCancellation2(true)}
-                      onClick={() => setCancellation2(!cancellation2)}
+                      onChange={() => {
+                        setCancellation2(true);
+                        setCancellation1(false); // Uncheck the other option
+                      }}
+                      // onClick={() => setCancellation2(!cancellation2)}
                       className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-600"
                     />
                     <label

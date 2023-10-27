@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import AuthNav from "./AuthNav";
-
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { useDispatch } from "react-redux";
@@ -17,7 +16,6 @@ export default function Login() {
 
   // const authUser = useSelector((state) => state.authUser.value);
   const dispatch = useDispatch();
-
 
   const [open, setOpen] = useState(false);
   const toggle = () => {

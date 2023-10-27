@@ -32,7 +32,7 @@ export default function Posted() {
       alert("Do you want to delete this experience?");
       setLoadingDelete(true); // set loading state to true
       setDeletingPostId(postId);
-      await axios.delete(`/experiences/updateAExperience/${postId}`, {
+      await axios.delete(`/experiences/deleteAExperience/${postId}`, {
         withCredentials: true,
       });
       setUserPosts((oldValues) => {

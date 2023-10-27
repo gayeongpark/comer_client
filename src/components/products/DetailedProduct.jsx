@@ -11,14 +11,16 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Map, { Marker, NavigationControl } from "react-map-gl";
 import Comments from "./Comments";
 import DetailedProductSK from "./DetailedProductSK";
+import BookingModal from "../Booking/BookingModal";
 
 export default function DetailedProduct() {
   const { id } = useParams();
   const [detailedProductData, setDetailedProductData] = useState();
+  const [selectedDateMaxGuestPairId, setSelectedDateMaxGuestPairId] =
+    useState("");
   const [isLiked, setIsLiked] = useState(false);
-
   const [isLoading, setIsLoading] = useState(true);
-
+  const [openModal, setOpenModal] = useState(false);
   const authUser = useSelector((state) => state.authUser.value);
 
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -59,7 +61,7 @@ export default function DetailedProduct() {
     fetchDetailedProductData();
   }, [id, authUser]);
 
-  // console.log(detailedProductData?.experience);
+  // console.log(detailedProductData);
 
   const startDate = new Date(detailedProductData?.experience?.startDate);
   // console.log(startDate);
@@ -232,46 +234,63 @@ export default function DetailedProduct() {
                 {/* Appointment */}
                 <div>
                   <div className="mt-6">
-                    {/* <h1>Make appointment</h1> */}
-                    <div className="flex flex-wrap justify-between items-center gap-2 mt-3">
-                      {dateStrings.map((dateString) => (
-                        <div
-                          className="border-2 p-4 items-center rounded-md"
-                          key={dateString}
-                        >
-                          <div className="mb-4">
-                            <div className="flex text-xl font-bold">
-                              {dateString}
-                            </div>
-                            <div className="font-light">
-                              {detailedProductData?.experience?.startTime}-
-                              {detailedProductData?.experience?.endTime}
-                            </div>
-                            <div className="flex gap-1 mt-2 font-light">
-                              Available{" "}
-                              <div className="font-normal">
-                                {detailedProductData?.experience?.maxGuest}
+                    <div className="flex flex-wrap justify-between gap-4 mt-3">
+                      {detailedProductData?.availability[0]?.dateMaxGuestPairs.map(
+                        (dateMaxGuestPair) => (
+                          <div className="flex-auto" key={dateMaxGuestPair._id}>
+                            <div className="border-2 p-4 items-center rounded-md">
+                              <div className="mb-4">
+                                <div className="flex text-xl font-bold">
+                                  {dateMaxGuestPair.date.split("T")[0]}
+                                </div>
+                                <div className="font-light">
+                                  {dateMaxGuestPair.startTime} -{" "}
+                                  {dateMaxGuestPair.endTime}
+                                </div>
+                                <div className="flex gap-1 mt-2 font-light">
+                                  Available{" "}
+                                  <div className="font-normal">
+                                    {dateMaxGuestPair.maxGuest}
+                                  </div>
+                                  guests
+                                </div>
                               </div>
-                              guests
+                              <div className="flex mb-4">
+                                <div className="font-bold text-xl">
+                                  {detailedProductData?.experience?.currency}
+                                  {detailedProductData?.experience?.price}
+                                </div>
+                                <div className="ml-2"> / person</div>
+                              </div>
+                              <div className="flex">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedDateMaxGuestPairId(
+                                      dateMaxGuestPair._id
+                                    );
+                                    setOpenModal(true);
+                                  }}
+                                  className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                >
+                                  Choose
+                                </button>
+                                <BookingModal
+                                  open={openModal}
+                                  experienceId={id}
+                                  dateMaxGuestPairId={
+                                    selectedDateMaxGuestPairId
+                                  }
+                                  onClose={() => {
+                                    setSelectedDateMaxGuestPairId(null);
+                                    setOpenModal(false);
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="flex mb-4">
-                            <div className="font-bold text-xl">
-                              {detailedProductData?.experience?.currency}
-                              {detailedProductData?.experience?.price}
-                            </div>
-                            <div className="ml-2"> / person</div>
-                          </div>
-                          <div className="flex">
-                            <button
-                              type="button"
-                              className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                            >
-                              Choose
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
@@ -306,19 +325,14 @@ export default function DetailedProduct() {
                             <p className="mb-1 sm:mr-1 sm:mb-0">
                               {detailedProductData.owner.firstName}
                             </p>
-                            {/* <p className='mb-1'>
-                          {detailedProductData.owner.lastName}
-                        </p> */}
                           </div>
                           <div className="flex text-gray-500 items-center text-sm">
                             <p className="text-red-700">
                               <MdLocationOn />
                             </p>
-                            <p className="mb-1">
-                              {detailedProductData.owner.city},{" "}
-                            </p>
-                            <p className="mb-1">
-                              {detailedProductData.owner.country}
+                            <p className="ml-1 text-gray-500 text-sm">
+                              {detailedProductData?.experience?.city},{" "}
+                              {detailedProductData?.experience?.country}
                             </p>
                           </div>
                         </div>
@@ -365,7 +379,7 @@ export default function DetailedProduct() {
                 {/* Language */}
                 <div className="mt-10">
                   <h3 className="text-lg font-medium text-gray-900">
-                    Hosted in
+                    Language
                   </h3>
                   <div className="flex mt-5">
                     {detailedProductData?.experience?.language.map(
