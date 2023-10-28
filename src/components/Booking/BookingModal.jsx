@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import { loadStripe } from "@stripe/stripe-js";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function BookingModal({
@@ -11,6 +11,7 @@ export default function BookingModal({
 }) {
   const [experienceData, setExperienceData] = useState("");
   const authUser = useSelector((state) => state.authUser.value);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +50,8 @@ export default function BookingModal({
           headers: { "content-Type": "application/json" },
         }
       );
+      navigate(`/BookedExperience/${authUser.id}`);
+
     } catch (error) {
       console.error("Failed to make a payment:", error);
       // Handle the error, e.g., display an error message to the user.

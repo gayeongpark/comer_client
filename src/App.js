@@ -15,6 +15,7 @@ import MyExperience from "./pages/MyExperience";
 import EditProduct from "./pages/EditProduct";
 import Success from "./components/Stripe/Success";
 import Cancel from "./components/Stripe/Cancel";
+import BookedExperience from "./components/Booking/BookedExperience";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
       <Route path="/myExperience/edit" element={<EditProduct />} />
       <Route path="/success" element={<Success />} />
       <Route path="/cancel" element={<Cancel />} />
+      <Route path="/BookedExperience/:userId" element={<BookedExperience />} />
     </Routes>
   );
 }

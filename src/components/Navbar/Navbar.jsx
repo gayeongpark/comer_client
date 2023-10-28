@@ -172,28 +172,28 @@ export default function Navbar() {
                                 </Menu.Item>
                               </Link>
                             )}
-                            {/* {authUser && (
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <div
-                                    // onClick={logout}
-                                    href="#"
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
-                                    )}
-                                  >
-                                    Booked experiences
-                                  </div>
-                                )}
-                              </Menu.Item>
-                            )} */}
+                            {authUser && (
+                              <Link to={`/BookedExperience/${authUser?.id}`}>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <div
+                                      href="#"
+                                      className={classNames(
+                                        active ? "bg-gray-100" : "",
+                                        "block px-4 py-2 text-sm text-gray-700"
+                                      )}
+                                    >
+                                      Booked experiences
+                                    </div>
+                                  )}
+                                </Menu.Item>
+                              </Link>
+                            )}
                             {authUser && (
                               <Link to={`/yourProfile/${authUser?.id}`}>
                                 <Menu.Item>
                                   {({ active }) => (
                                     <div
-                                      // onClick={logoutGoogle}
                                       href="#"
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
