@@ -34,7 +34,7 @@ export default function Products() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("/experiences/");
+        const response = await axios.get("/experiences");
         const products = response.data;
         setNewProductData(
           products.map((product) => ({
@@ -45,7 +45,6 @@ export default function Products() {
       } catch (error) {
         console.error(error);
       }
-      console.log("a");
     }
     fetchData();
   }, []);

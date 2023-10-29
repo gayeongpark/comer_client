@@ -50,8 +50,7 @@ export default function BookingModal({
           headers: { "content-Type": "application/json" },
         }
       );
-      navigate(`/BookedExperience/${authUser.id}`);
-
+      navigate(`/bookedExperience/${authUser.id}`);
     } catch (error) {
       console.error("Failed to make a payment:", error);
       // Handle the error, e.g., display an error message to the user.

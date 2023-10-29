@@ -193,7 +193,7 @@ export default function Posting() {
       }, 2000); // wait for 2 seconds before navigating to home page
     } catch (error) {
       console.error(error.response.data);
-      setError(error.response.data);
+      setError(error.message);
     }
   };
 

@@ -29,7 +29,7 @@ export default function Login() {
         password,
       };
       const response = await axios.post("/auth/login", params, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
       const user = response.data;

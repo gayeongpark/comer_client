@@ -100,7 +100,7 @@ export default function Comment({ comment }) {
       )}
       <div className="flex flex-col text-gray-800">
         <span className="font-semibold">
-          {commentOwner?.firstName} {commentOwner?.lastName}
+          {commentOwner?.email}
           <span className="ml-2 text-sm text-gray-400">{dateString}</span>
         </span>
         <span className="text-sm">{comment?.description}</span>

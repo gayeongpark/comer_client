@@ -2,12 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  // BellIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "../../redux/authSlice";
 import { useSelector } from "react-redux";
 
+// Utility function to handle CSS classes
+// The classNames function is used in the code I provided to generate a string of CSS class names for an element, allowing me to conditionally apply classes based on certain conditions.
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -15,25 +21,32 @@ function classNames(...classes) {
 export default function Navbar() {
   const dispatch = useDispatch();
 
+  // Get the authenticated user information from Redux state
   const authUser = useSelector((state) => state.authUser.value);
 
+  // Function to handle user logout
   const logout = async () => {
     try {
+      // Send a logout request to the server
       const loggedOut = await axios.post("/auth/logout", {
-        headers: { "Content-Type": "application/json" },
+        headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
       if (loggedOut) {
+        // Update the Redux state to indicate the user is no longer authenticated
         dispatch(setAuthUser(loggedOut));
+        // Redirect the user to the login page
         window.location.href = "http://localhost:3000/login";
       }
     } catch (error) {
+      // If logout fails, update the Redux state accordingly
       dispatch(setAuthUser(false));
     }
   };
 
   return (
-    <>
+    <nav role="navigation">
+      {/* semantic tag of Navigation */}
       <div className="min-h-full">
         <Disclosure as="nav" className="relative bg-800">
           {({ open }) => (
@@ -46,7 +59,7 @@ export default function Navbar() {
                         <h1>Comer</h1>
                       </Link>
                     </div>
-                    <div className="hidden md:block"></div>
+                    {/* <div className="hidden md:block"></div> */}
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6 space-x-4">
@@ -58,16 +71,17 @@ export default function Navbar() {
                           Open experience
                         </button>
                       </Link>
-                      <button
+                      {/* <button
                         type="button"
                         className="rounded-full p-1 text-red-400 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-800"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                      </button> */}
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
+                        {/* If there is not authUser.profilePicture, I want to display just the default picture */}
                         {!authUser.profilePicture && (
                           <div>
                             <Menu.Button className="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-800">
@@ -80,7 +94,7 @@ export default function Navbar() {
                             </Menu.Button>
                           </div>
                         )}
-
+                        {/* If there is a saved authUser.profilePicture, I want to display just the saved picture */}
                         {authUser.profilePicture && (
                           <div>
                             <Menu.Button className="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-800">
@@ -107,12 +121,17 @@ export default function Navbar() {
                               <Link to="/login">
                                 <Menu.Item>
                                   {({ active }) => (
+                                    // The active parameter tells whether this menu item is currently active or selected.
                                     <div
                                       href="#"
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
                                         "block px-4 py-2 text-sm text-gray-700"
                                       )}
+                                      // The className attribute is assigned the result of the classNames function.
+                                      // This function is used to conditionally build a string of class names for the div element.
+                                      // If the active parameter is true, it adds the class "bg-gray-100" to the element's classes; otherwise, it adds an empty string ("").
+                                      // This is how the active menu item gets a different background color ("bg-gray-100").
                                     >
                                       Log in
                                     </div>
@@ -125,7 +144,6 @@ export default function Navbar() {
                               <Menu.Item>
                                 {({ active }) => (
                                   <div
-                                    // onClick={logoutGoogle}
                                     href="#"
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
@@ -156,10 +174,10 @@ export default function Navbar() {
                             )} */}
                             {authUser && (
                               <Link to={`/myExperience/${authUser?.id}`}>
+                                {/* When this button is clicked, I want to locate user to this URL page */}
                                 <Menu.Item>
                                   {({ active }) => (
                                     <div
-                                      // onClick={logout}
                                       href="#"
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
@@ -173,7 +191,7 @@ export default function Navbar() {
                               </Link>
                             )}
                             {authUser && (
-                              <Link to={`/BookedExperience/${authUser?.id}`}>
+                              <Link to={`/bookedExperience/${authUser?.id}`}>
                                 <Menu.Item>
                                   {({ active }) => (
                                     <div
@@ -210,6 +228,7 @@ export default function Navbar() {
                               <Menu.Item>
                                 {({ active }) => (
                                   <div
+                                    // If this btn is clicked, logout function will be executed
                                     onClick={logout}
                                     href="#"
                                     className={classNames(
@@ -240,10 +259,12 @@ export default function Navbar() {
                       </Menu>
                     </div>
                   </div>
+
+                  {/* Mobile menu button */}
                   <div className="-mr-2 flex md:hidden">
-                    {/* Mobile menu button */}
                     <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open main menu</span>
+                      {/* if open is true, I want to display Xicon. If it is false, I want to display hamburger icon. */}
                       {open ? (
                         <XMarkIcon
                           className="block h-6 w-6"
@@ -305,22 +326,38 @@ export default function Navbar() {
                     )}
                     {authUser && (
                       <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                        Open experience
+                      </Disclosure.Button>
+                    )}
+                    {authUser && (
+                      <Link to={`/yourProfile/${authUser?.id}`}>
+                        <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                          Your profile
+                        </Disclosure.Button>
+                      </Link>
+                    )}
+                    {authUser && (
+                      <Link to={`/myExperience/${authUser?.id}`}>
+                        <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                          Your experience
+                        </Disclosure.Button>
+                      </Link>
+                    )}
+                    {authUser && (
+                      <Link to={`/BookedExperience/${authUser?.id}`}>
+                        <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                          Booked experience
+                        </Disclosure.Button>
+                      </Link>
+                    )}
+                    {authUser && (
+                      <Disclosure.Button
+                        onClick={logout}
+                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                      >
                         Log out
                       </Disclosure.Button>
                     )}
-                    {authUser && (
-                      <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-                        Your profile
-                      </Disclosure.Button>
-                    )}
-                    {authUser && (
-                      <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-                        Settings
-                      </Disclosure.Button>
-                    )}
-                    <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-                      Be a host
-                    </Disclosure.Button>
                   </div>
                 </div>
               </Disclosure.Panel>
@@ -328,6 +365,6 @@ export default function Navbar() {
           )}
         </Disclosure>
       </div>
-    </>
+    </nav>
   );
 }
