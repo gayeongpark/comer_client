@@ -45,7 +45,7 @@ export default function BookedExperience() {
         await axios.delete(`/experiences/cancel-booking/${bookingId}`);
         // Remove the canceled booking from the state or reload the bookings
         // You may need to update the bookings state accordingly
-        // navigate("/"); // Redirect to the desired page
+        navigate("/"); // Redirect to the home page to make user explore more posts.
       } catch (error) {
         console.error("Failed to cancel the booking:", error);
         // Handle the error, e.g., display an error message to the user
