@@ -9,7 +9,7 @@ export default function Posted() {
   const [deletingPostId, setDeletingPostId] = useState("");
   // const { id } = useParams();
   const authUser = useSelector((state) => state.authUser.value);
-  console.log(authUser.id);
+  // console.log(authUser.id);
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
@@ -22,7 +22,7 @@ export default function Posted() {
     fetchUserPosts();
   }, [authUser.id]);
 
-  console.log(userPosts);
+  // console.log(userPosts);
 
   const handleDelete = async (postId) => {
     try {
@@ -55,9 +55,11 @@ export default function Posted() {
           key={post._id}
           className="flex justify-between mx-auto max-w-2xl p-5 ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none"
         >
-          <div className="flex text-2xl items-center justify-center">
-            <h2>{post.title}</h2>
-          </div>
+          <Link to={`/product/${post._id}`}>
+            <button className="flex text-2xl items-center justify-center">
+              <h2>{post.title}</h2>
+            </button>
+          </Link>
           <div className="flex flex-col justify-between gap-4 items-center">
             <div>
               <Link to={"/myExperience/edit"} state={{ experience: post }}>

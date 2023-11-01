@@ -10,17 +10,30 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-const animatedComponents = makeAnimated();
-
 export default function EditPost() {
+  const animatedComponents = makeAnimated();
   const location = useLocation();
   const post = location.state.experience;
   // console.log('post', post);
 
   const [experienceInformation, setExperienceInformation] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [successUpdateTitle, setSuccessUpdateTitle] = useState("");
   const [successUpdateImages, setSuccessUpdateImages] = useState("");
+  const [successUpdateDescription, setSuccessUpdateDescription] = useState("");
+  const [successUpdatePerks, setSuccessUpdatePerks] = useState("");
+  const [successUpdateCancellation, setSuccessUpdateCancellation] =
+    useState("");
+  const [successUpdatePriceCurrency, setSuccessUpdatePriceCurrency] =
+    useState("");
+  const [successUpdateGuestRequirements, setSuccessUpdateGuestRequirements] =
+    useState("");
+  const [successUpdateAvailability, setSuccessUpdateAvailability] =
+    useState("");
+  const [successUpdateAddress, setSuccessUpdateAddress] = useState("");
+  const [successUpdateNotice, setSuccessUpdateNotice] = useState("");
+  const [successUpdateTags, setSuccessUpdateTags] = useState("");
+  const [successUpdateLanguage, setSuccessUpdateLanguage] = useState("");
   const [openInputImage, setOpenInputImage] = useState(false);
   const [openInputTitle, setOpenInputTitle] = useState(false);
   const [openInputAddress, setOpenInputAddress] = useState(false);
@@ -104,9 +117,37 @@ export default function EditPost() {
     setPreviewUrls(urls);
   };
 
-  const handlePerksChange = (event) => {
-    const { name, value } = event.target;
-    setPerks({ ...perks, [name]: value });
+  const handleLanguageChange = (selectedOptions) => {
+    setLanguage(selectedOptions);
+  };
+
+  const handlePerksChange = (e) => {
+    const { name, value } = e.target;
+    setPerks((prevPerks) => ({
+      ...prevPerks,
+      [name]: value,
+    }));
+  };
+
+  const handleRequirementsChange = (e) => {
+    const { name, value } = e.target;
+
+    switch (name) {
+      case "minimumAge":
+        setMinimumAge(value);
+        break;
+      case "kidsAllowed":
+        setKidsAllowed(!kidsAllowed);
+        break;
+      case "petsAllowed":
+        setPetsAllowed(!petsAllowed);
+        break;
+      case "maxGuest":
+        setMaxGuest(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const [startDate, setStartDate] = useState(new Date());
@@ -157,143 +198,324 @@ export default function EditPost() {
   }, [post._id, experienceInformation]);
   // console.log('Get:', experienceInformation);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleUpdateImages = async () => {
     const formData = new FormData();
-    if (selectedFiles.length > 0 && previewUrls.length > 0) {
+    if (selectedFiles.length > 0) {
       for (let i = 0; i < selectedFiles.length; i++) {
         formData.append("files", selectedFiles[i]);
       }
     }
-
-    if (title) {
-      console.log(title);
-      formData.append("title", title);
-    }
-
-    if (description) {
-      formData.append("description", description);
-    }
-
-    const perksKeys = Object.keys(perks);
-    for (let i = 0; i < perksKeys.length; i++) {
-      const key = perksKeys[i];
-      if (perks[key]) {
-        formData.append(`perks.${key}`, perks[key]);
-      }
-    }
-
-    if (minimumAge) {
-      formData.append("minimumAge", Number(minimumAge));
-    }
-    if (kidsAllowed !== post.kidsAllowed) {
-      formData.append("kidsAllowed", kidsAllowed);
-    }
-    if (petsAllowed !== post.petsAllowed) {
-      formData.append("petsAllowed", petsAllowed);
-    }
-
-    if (maxGuest) {
-      formData.append("maxGuest", Number(maxGuest));
-    }
-
-    if (language.length > 0) {
-      formData.append("language", JSON.stringify(language));
-    }
-
-    if (startTime) {
-      formData.append("startTime", startTime);
-    }
-
-    if (endTime) {
-      formData.append("endTime", endTime);
-    }
-
-    if (startDate) {
-      formData.append("startDate", startDate);
-    }
-
-    if (endDate) {
-      formData.append("endDate", endDate);
-    }
-
-    if (tags.length > 0) {
-      formData.append("tags", JSON.stringify(tags));
-    }
-
-    if (price) {
-      formData.append("price", Number(price));
-    }
-
-    if (currency) {
-      formData.append("currency", currency);
-    }
-
-    if (country) {
-      formData.append("country", country);
-    }
-
-    if (city) {
-      formData.append("city", city);
-    }
-
-    if (state) {
-      formData.append("state", state);
-    }
-
-    if (address) {
-      formData.append("address", address);
-    }
-
-    if (feature?.geometry?.coordinates[1]) {
-      formData.append("latitude", feature?.geometry?.coordinates[1]);
-    }
-
-    if (feature?.geometry?.coordinates[0]) {
-      formData.append("longitude", feature?.geometry?.coordinates[0]);
-    }
-
-    if (JSON.stringify(feature?.geometry?.coordinates)) {
-      formData.append("coordinates", feature?.geometry?.coordinates);
-    }
-
-    if (feature?.properties?.full_address) {
-      formData.append("fullAddress", feature?.properties?.full_address);
-    }
-
-    if (notice) {
-      formData.append("notice", notice);
-    }
-    if (cancellation1 !== post.cancellation1) {
-      formData.append("cancellation1", cancellation1);
-    }
-    if (cancellation2 !== post.cancellation2) {
-      formData.append("cancellation2", cancellation2);
-    }
-
-    if (formData.entries().next().done) {
-      setSuccess("There is no change to update!");
-      return;
-    }
-
     try {
-      await axios.put(`/experiences/${post._id}/updateExperience`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
-      if (
-        post.files.every(
-          (value, index) =>
-            value === experienceInformation?.experience?.files[index]
-        )
-      ) {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateImage`,
+        formData,
+        {
+          headers: {
+            "content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
         setSuccessUpdateImages("The images are successfully updated!");
+        setError("");
       }
     } catch (error) {
       console.error(error.response.data);
       setError(error.response.data);
+    }
+  };
+
+  const handleUpdateTitle = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateTitle`,
+        { title },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setSuccessUpdateTitle("Title is updated successfully");
+      }
+    } catch (error) {
+      console.error(error.response.data);
+      setError(error.response.data);
+    }
+  };
+
+  const handleUpdateDescription = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateDescription`,
+        { description },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setSuccessUpdateDescription("Description is updated successfully");
+        setError("");
+      }
+    } catch (error) {
+      console.error(error.response.data);
+      setError(error.response.data);
+    }
+  };
+  const handleUpdateperks = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updatePerks`,
+        {
+          perks,
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setSuccessUpdatePerks("Perks is updated successfully");
+        setError("");
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle network or other errors
+    }
+  };
+
+  const handleUpdateGuestRequirements = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateGuestRequirements`,
+        {
+          minimumAge,
+          kidsAllowed,
+          petsAllowed,
+          maxGuest,
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setSuccessUpdateGuestRequirements(
+          "Guest requirements are updated successfully"
+        );
+        setError("");
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle network or other errors
+    }
+  };
+
+  const handleUpdateLanguage = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateLanguage`,
+        {
+          language: JSON.stringify(language),
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setSuccessUpdateLanguage("Languages are updated successfully");
+        setError("");
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle network or other errors
+    }
+  };
+
+  const handleUpdateTags = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateTags`,
+        {
+          tags: JSON.stringify(tags),
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setSuccessUpdateTags("Tags updated successfully");
+        setError("");
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle network or other errors
+    }
+  };
+
+  const handleUpdateNotice = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateNotice`, // Adjust the API endpoint as needed
+        {
+          notice: notice, // Send the updated notice
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setSuccessUpdateNotice("Notice is updated successfully"); // Provide user feedback
+      } else {
+        setError("Failed to update notice"); // Handle errors appropriately
+        setError("");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update notice"); // Handle errors appropriately
+    }
+  };
+
+  const handleUpdateCancellation = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateCancellation`, // Adjust the API endpoint as needed
+        {
+          cancellation1, // Send the updated cancellation1 value
+          cancellation2, // Send the updated cancellation2 value
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setSuccessUpdateCancellation(
+          "Cancellation fields are updated successfully"
+        ); // Provide user feedback
+        setError("");
+      } else {
+        setError("Failed to update cancellation fields"); // Handle errors appropriately
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update cancellation fields"); // Handle errors appropriately
+    }
+  };
+
+  const handleUpdateAddress = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateAddress`,
+        {
+          address,
+          country,
+          state,
+          city,
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setSuccessUpdateAddress("Address is updated successfully");
+        setError("");
+      } else {
+        setError("Failed to update address");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update address");
+    }
+  };
+
+  const handleUpdatePriceCurrency = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updatePriceCurrency`, // Adjust the API endpoint as needed
+        {
+          price, // Send the updated cancellation1 value
+          currency, // Send the updated cancellation2 value
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setSuccessUpdatePriceCurrency(
+          "Price and currency are updated successfully"
+        ); // Provide user feedback
+        setError("");
+      } else {
+        setError("Failed to update cancellation fields"); // Handle errors appropriately
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update cancellation fields"); // Handle errors appropriately
+    }
+  };
+
+  const handleUpdateAvailiability = async () => {
+    try {
+      const response = await axios.put(
+        `/experiences/${post._id}/updateAvailiability`,
+        {
+          minimumAge,
+          startTime,
+          endTime,
+          maxGuest,
+          startDate,
+          endDate,
+        },
+        {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setSuccessUpdateAvailability("Availiability are updated successfully"); // Provide user feedback
+        setError("");
+      } else {
+        setError("Failed to update cancellation fields"); // Handle errors appropriately
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Failed to update address");
     }
   };
 
@@ -311,8 +533,6 @@ export default function EditPost() {
       <div className="w-2/3">
         <dl>
           <div className="border-b py-5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            {success && <div className="text-red-600">{success}</div>}
-            {error && <div className="text-red-600">{error}</div>}
             <dt className="text-sm font-medium text-gray-500">
               Experience image
             </dt>
@@ -366,7 +586,6 @@ export default function EditPost() {
                         multiple
                       />
                     </label>
-                    {/* <p className='pl-1'>or drag and drop</p> */}
                   </div>
                   <p className="text-xs leading-5 text-gray-600">
                     PNG, JPG, GIF up to 5 files
@@ -375,12 +594,11 @@ export default function EditPost() {
               )}
             </div>
 
-            {/* <div className='font-medium text-red-600 cursor-pointer'>Edit</div> */}
             {openInputImage && (
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateImages}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -395,6 +613,7 @@ export default function EditPost() {
                 {successUpdateImages && (
                   <div className="text-red-600">{successUpdateImages}</div>
                 )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -437,7 +656,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateTitle}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -449,6 +668,10 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateTitle && (
+                  <div className="text-red-600">{successUpdateTitle}</div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -495,7 +718,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateDescription}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -507,6 +730,10 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateDescription && (
+                  <div className="text-red-600">{successUpdateDescription}</div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -662,7 +889,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateperks}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -674,6 +901,10 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdatePerks && (
+                  <div className="text-red-600">{successUpdatePerks}</div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -721,7 +952,7 @@ export default function EditPost() {
                   name="minimumAge"
                   autoComplete="off"
                   value={minimumAge}
-                  onChange={(e) => setMinimumAge(e.target.value)}
+                  onChange={handleRequirementsChange}
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 >
                   <option>Select minimum age</option>
@@ -741,11 +972,10 @@ export default function EditPost() {
                   <div className="flex items-center gap-x-3">
                     <input
                       id="kids"
-                      name="kids"
+                      name="kidsAllowed"
                       type="radio"
                       checked={kidsAllowed}
-                      onChange={() => setKidsAllowed(true)}
-                      onClick={() => setKidsAllowed(!kidsAllowed)}
+                      onChange={handleRequirementsChange}
                       className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-600"
                     />
                     <label
@@ -758,11 +988,10 @@ export default function EditPost() {
                   <div className="flex items-center gap-x-3">
                     <input
                       id="pets"
-                      name="pets"
+                      name="petsAllowed"
                       type="radio"
                       checked={petsAllowed}
-                      onChange={() => setPetsAllowed(true)}
-                      onClick={() => setPetsAllowed(!petsAllowed)}
+                      onChange={handleRequirementsChange}
                       className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-600"
                     />
                     <label
@@ -785,10 +1014,10 @@ export default function EditPost() {
                   guardian.
                 </div>
                 <select
-                  id="size"
-                  name="size"
+                  id="maxGuest"
+                  name="maxGuest"
                   autoComplete="off"
-                  onChange={(e) => setMaxGuest(e.target.value)}
+                  onChange={handleRequirementsChange}
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 >
                   <option>Select maximum size of group</option>
@@ -809,7 +1038,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateGuestRequirements}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -821,6 +1050,12 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateGuestRequirements && (
+                  <div className="text-red-600">
+                    {successUpdateGuestRequirements}
+                  </div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -860,7 +1095,7 @@ export default function EditPost() {
                   components={animatedComponents}
                   id="language"
                   name="language"
-                  onChange={setLanguage}
+                  onChange={handleLanguageChange}
                   className="mt-2 block w-1/2 rounded-md text-gray-900 shadow-sm ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 ></Select>
               </div>
@@ -869,7 +1104,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateLanguage}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -881,6 +1116,10 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateLanguage && (
+                  <div className="text-red-600">{successUpdateLanguage}</div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -1071,7 +1310,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateAvailiability}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -1083,6 +1322,12 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateAvailability && (
+                  <div className="text-red-600">
+                    {successUpdateAvailability}
+                  </div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -1157,7 +1402,7 @@ export default function EditPost() {
                 <div className="flex items-center space-x-4 mt-4">
                   <button
                     type="submit"
-                    onClick={handleSubmit}
+                    onClick={handleUpdateTags}
                     className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                   >
                     Save
@@ -1169,6 +1414,10 @@ export default function EditPost() {
                   >
                     Cancel
                   </button>
+                  {successUpdateTags && (
+                    <div className="text-red-600">{successUpdateTags}</div>
+                  )}
+                  {error && <div className="text-red-600">{error}</div>}
                 </div>
               </form>
             )}
@@ -1179,9 +1428,8 @@ export default function EditPost() {
             <dt className="text-sm font-medium text-gray-500">Price</dt>
 
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {(experienceInformation?.experience?.price ||
-                experienceInformation?.experience?.currency) &&
-                `${experienceInformation?.experience?.currency} ${experienceInformation?.experience?.price}`}
+              {experienceInformation.experience.currency}{" "}
+              {experienceInformation.experience.price}
             </dd>
 
             <div
@@ -1243,7 +1491,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdatePriceCurrency}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -1255,6 +1503,12 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdatePriceCurrency && (
+                  <div className="text-red-600">
+                    {successUpdatePriceCurrency}
+                  </div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
@@ -1392,7 +1646,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateAddress}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -1404,6 +1658,10 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateAddress && (
+                  <div className="text-red-600">{successUpdateAddress}</div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </form>
@@ -1425,7 +1683,7 @@ export default function EditPost() {
             {openInputNotice && (
               <div className="col-span-6 sm:col-span-3">
                 <label
-                  htmlFor="description"
+                  htmlFor="notice"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Notice
@@ -1435,9 +1693,10 @@ export default function EditPost() {
                 </div>
                 <textarea
                   type="text"
-                  name="description"
-                  id="description"
+                  name="notice"
+                  id="notice"
                   autoComplete="off"
+                  value={notice}
                   onChange={(e) => setNotice(e.target.value)}
                   className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 />
@@ -1447,7 +1706,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateNotice}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -1459,9 +1718,14 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateNotice && (
+                  <div className="text-red-600">{successUpdateNotice}</div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
+
           {/* Cancellation policy */}
           <div className="px-4 py-10 border-b sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">
@@ -1469,9 +1733,9 @@ export default function EditPost() {
             </dt>
 
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {post.cancellation1 &&
+              {experienceInformation.experience.cancellation1 === true &&
                 "Guests can cancel until 7 days before the Experience start time for a full refund, or within 24 hours of booking as long as the booking is made more than 48 hours before the start time."}{" "}
-              {post.cancellation2 &&
+              {experienceInformation.experience.cancellation2 === true &&
                 "Guests can cancel until 24 hours before the Experience start time for a full refund."}
             </dd>
 
@@ -1495,8 +1759,8 @@ export default function EditPost() {
                 <div className="mt-6 space-y-6">
                   <div className="flex items-center gap-x-3">
                     <input
-                      id="cancel1"
-                      name="cancel1"
+                      id="cancellation1"
+                      name="cancellation1"
                       type="radio"
                       checked={cancellation1}
                       onChange={() => {
@@ -1507,7 +1771,7 @@ export default function EditPost() {
                       className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-600"
                     />
                     <label
-                      htmlFor="cancel1"
+                      htmlFor="cancellation1"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
                       Guests can cancel until 7 days before the Experience start
@@ -1518,8 +1782,8 @@ export default function EditPost() {
                   </div>
                   <div className="flex items-center gap-x-3">
                     <input
-                      id="cancel2"
-                      name="cancel2"
+                      id="cancellation2"
+                      name="cancellation2"
                       type="radio"
                       checked={cancellation2}
                       onChange={() => {
@@ -1530,7 +1794,7 @@ export default function EditPost() {
                       className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-600"
                     />
                     <label
-                      htmlFor="cancel2"
+                      htmlFor="cancellation2"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
                       Guests can cancel until 24 hours before the Experience
@@ -1544,7 +1808,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={handleUpdateCancellation}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -1556,15 +1820,18 @@ export default function EditPost() {
                 >
                   Cancel
                 </button>
+                {successUpdateCancellation && (
+                  <div className="text-red-600">
+                    {successUpdateCancellation}
+                  </div>
+                )}
+                {error && <div className="text-red-600">{error}</div>}
               </div>
             )}
           </div>
         </dl>
       </div>
-      <div className="flex items-center space-x-4 mt-4">
-        {success && <div className="text-red-600">{success}</div>}
-        {error && <div className="text-red-600">{error}</div>}
-      </div>
+      <div className="flex items-center space-x-4 mt-4"></div>
     </div>
   );
 }

@@ -10,10 +10,10 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-const animatedComponents = makeAnimated();
 
 export default function Posting() {
   const navigate = useNavigate();
+  const animatedComponents = makeAnimated();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
