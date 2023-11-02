@@ -41,6 +41,9 @@ export default function DetailedProduct() {
         authUser.id,
       ];
       await axios.put(`/users/likes/${id}`, updatedLikes, {
+        headers: {
+          "content-Type": "application/json",
+        },
         withCredentials: true,
       });
     }
@@ -50,7 +53,12 @@ export default function DetailedProduct() {
   useEffect(() => {
     const fetchDetailedProductData = async () => {
       try {
-        const { data } = await axios.get(`/experiences/${id}`);
+        const { data } = await axios.get(`/experiences/${id}`, {
+          headers: {
+            "content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         setDetailedProductData(data);
         setIsLiked(data.experience.likes.includes(authUser.id));
         setIsLoading(false);

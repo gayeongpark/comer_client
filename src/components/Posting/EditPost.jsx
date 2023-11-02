@@ -1,23 +1,22 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { DateRangePicker } from "react-date-range";
 import { MdOutlineCancel } from "react-icons/md";
 import { format, parseISO } from "date-fns";
 import { AddressAutofill, AddressMinimap } from "@mapbox/search-js-react";
 import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function EditPost() {
+export default function EditPost({ postId }) {
+  // const navigate = useNavigate();
   const animatedComponents = makeAnimated();
-  const location = useLocation();
-  const post = location.state.experience;
-  // console.log('post', post);
 
   const [experienceInformation, setExperienceInformation] = useState("");
   const [error, setError] = useState("");
+
   const [successUpdateTitle, setSuccessUpdateTitle] = useState("");
   const [successUpdateImages, setSuccessUpdateImages] = useState("");
   const [successUpdateDescription, setSuccessUpdateDescription] = useState("");
@@ -71,10 +70,10 @@ export default function EditPost() {
     (res) => {
       const feature = res.features[0];
       setFeature(feature);
-      // console.log(feature);
     },
     [setFeature]
   );
+  // console.log(feature);
 
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
@@ -97,10 +96,6 @@ export default function EditPost() {
   const [endTime, setEndTime] = useState("");
   const [price, setPrice] = useState("");
   const [currency, setCurrency] = useState("$");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [address, setAddress] = useState("");
   const [notice, setNotice] = useState("");
   const [cancellation1, setCancellation1] = useState(false);
   const [cancellation2, setCancellation2] = useState(false);
@@ -166,6 +161,7 @@ export default function EditPost() {
     endDate: endDate,
     key: "selection",
   };
+  // console.log(selectionRange);
 
   const handleSaveTags = (event) => {
     event.preventDefault();
@@ -188,14 +184,19 @@ export default function EditPost() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await axios.get(`/experiences/${post._id}`, {
+        const userData = await axios.get(`/experiences/${postId}`, {
+          headers: {
+            "content-Type": "application/json",
+          },
           withCredentials: true,
         });
-        setExperienceInformation(userData.data);
+        if (userData.status === 200) {
+          setExperienceInformation(userData.data);
+        }
       } catch (error) {}
     };
     fetchUserData();
-  }, [post._id, experienceInformation]);
+  }, [postId, experienceInformation.experience]);
   // console.log('Get:', experienceInformation);
 
   const handleUpdateImages = async () => {
@@ -207,7 +208,7 @@ export default function EditPost() {
     }
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateImage`,
+        `/experiences/${postId}/updateImage`,
         formData,
         {
           headers: {
@@ -229,7 +230,7 @@ export default function EditPost() {
   const handleUpdateTitle = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateTitle`,
+        `/experiences/${postId}/updateTitle`,
         { title },
         {
           headers: {
@@ -238,7 +239,7 @@ export default function EditPost() {
           withCredentials: true,
         }
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         setSuccessUpdateTitle("Title is updated successfully");
       }
@@ -251,7 +252,7 @@ export default function EditPost() {
   const handleUpdateDescription = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateDescription`,
+        `/experiences/${postId}/updateDescription`,
         { description },
         {
           headers: {
@@ -269,10 +270,10 @@ export default function EditPost() {
       setError(error.response.data);
     }
   };
-  const handleUpdateperks = async () => {
+  const handleUpdatePerks = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updatePerks`,
+        `/experiences/${postId}/updatePerks`,
         {
           perks,
         },
@@ -296,12 +297,12 @@ export default function EditPost() {
   const handleUpdateGuestRequirements = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateGuestRequirements`,
+        `/experiences/${postId}/updateGuestRequirements`,
         {
-          minimumAge,
+          minimumAge: Number(minimumAge),
           kidsAllowed,
           petsAllowed,
-          maxGuest,
+          maxGuest: Number(maxGuest),
         },
         {
           headers: {
@@ -325,7 +326,7 @@ export default function EditPost() {
   const handleUpdateLanguage = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateLanguage`,
+        `/experiences/${postId}/updateLanguage`,
         {
           language: JSON.stringify(language),
         },
@@ -349,7 +350,7 @@ export default function EditPost() {
   const handleUpdateTags = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateTags`,
+        `/experiences/${postId}/updateTags`,
         {
           tags: JSON.stringify(tags),
         },
@@ -373,9 +374,9 @@ export default function EditPost() {
   const handleUpdateNotice = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateNotice`, // Adjust the API endpoint as needed
+        `/experiences/${postId}/updateNotice`, // Adjust the API endpoint as needed
         {
-          notice: notice, // Send the updated notice
+          notice, // Send the updated notice
         },
         {
           headers: {
@@ -400,7 +401,7 @@ export default function EditPost() {
   const handleUpdateCancellation = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateCancellation`, // Adjust the API endpoint as needed
+        `/experiences/${postId}/updateCancellation`, // Adjust the API endpoint as needed
         {
           cancellation1, // Send the updated cancellation1 value
           cancellation2, // Send the updated cancellation2 value
@@ -412,7 +413,6 @@ export default function EditPost() {
           withCredentials: true,
         }
       );
-
       if (response.status === 200) {
         setSuccessUpdateCancellation(
           "Cancellation fields are updated successfully"
@@ -429,13 +429,17 @@ export default function EditPost() {
 
   const handleUpdateAddress = async () => {
     try {
-      const response = await axios.put(
-        `/experiences/${post._id}/updateAddress`,
+      const responseAddress = await axios.put(
+        `/experiences/${postId}/updateLocation`,
         {
-          address,
-          country,
-          state,
-          city,
+          address: feature?.properties?.address_line1,
+          country: feature?.properties?.country,
+          state: feature?.properties?.address_level1,
+          city: feature?.properties?.address_level2,
+          latitude: feature?.geometry?.coordinates[1],
+          longitude: feature?.geometry?.coordinates[0],
+          coordinates: JSON.stringify(feature?.geometry?.coordinates),
+          fullAddress: feature?.properties?.full_address,
         },
         {
           headers: {
@@ -444,8 +448,7 @@ export default function EditPost() {
           withCredentials: true,
         }
       );
-
-      if (response.status === 200) {
+      if (responseAddress.status === 200) {
         setSuccessUpdateAddress("Address is updated successfully");
         setError("");
       } else {
@@ -460,10 +463,10 @@ export default function EditPost() {
   const handleUpdatePriceCurrency = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updatePriceCurrency`, // Adjust the API endpoint as needed
+        `/experiences/${postId}/updatePriceCurrency`, // Adjust the API endpoint as needed
         {
-          price, // Send the updated cancellation1 value
-          currency, // Send the updated cancellation2 value
+          price: Number(price),
+          currency,
         },
         {
           headers: {
@@ -490,12 +493,10 @@ export default function EditPost() {
   const handleUpdateAvailiability = async () => {
     try {
       const response = await axios.put(
-        `/experiences/${post._id}/updateAvailiability`,
+        `/experiences/${postId}/updateAvailiability`,
         {
-          minimumAge,
           startTime,
           endTime,
-          maxGuest,
           startDate,
           endDate,
         },
@@ -537,7 +538,7 @@ export default function EditPost() {
               Experience image
             </dt>
             <div className="flex mt-2 justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-              {previewUrls.length > 0 ? (
+              {previewUrls?.length > 0 ? (
                 <div className="grid grid-cols-2 gap-3">
                   {previewUrls.map((url, index) => (
                     <div key={index} className="relative">
@@ -622,7 +623,9 @@ export default function EditPost() {
           <div className="flex items-center justify-between px-4 py-10 border-b sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Title</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {experienceInformation?.experience?.title}
+              {experienceInformation &&
+                experienceInformation.experience &&
+                experienceInformation.experience.title}
             </dd>
             <div
               onClick={() => setOpenInputTitle(!openInputTitle)}
@@ -745,23 +748,43 @@ export default function EditPost() {
             </dt>
 
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {experienceInformation?.experience?.perks?.food &&
-                `Food: ${experienceInformation?.experience?.perks?.food}`}
-              <br />
-              {experienceInformation?.experience?.perks?.transportation &&
-                `Transportation: ${experienceInformation?.experience?.perks?.transportation}`}
-              <br />
-              {experienceInformation?.experience?.perks?.beverage &&
-                `Beverage: ${experienceInformation?.experience?.perks?.beverage}`}
-              <br />
-              {experienceInformation?.experience?.perks?.alcohol &&
-                `Alcohol: ${experienceInformation?.experience?.perks?.alcohol}`}
-              <br />
-              {experienceInformation?.experience?.perks?.equipment &&
-                `Equipment: ${experienceInformation?.experience?.perks?.equipment}`}
-              <br />
-              {experienceInformation?.experience?.perks?.others &&
-                `Others: ${experienceInformation?.experience?.perks?.others}`}
+              {experienceInformation?.experience?.perks && (
+                <>
+                  {experienceInformation.experience.perks.food && (
+                    <div>
+                      Food: {experienceInformation.experience.perks.food}
+                    </div>
+                  )}
+                  {experienceInformation.experience.perks.transportation && (
+                    <div>
+                      Transportation:{" "}
+                      {experienceInformation.experience.perks.transportation}
+                    </div>
+                  )}
+                  {experienceInformation.experience.perks.beverage && (
+                    <div>
+                      Beverage:{" "}
+                      {experienceInformation.experience.perks.beverage}
+                    </div>
+                  )}
+                  {experienceInformation.experience.perks.alcohol && (
+                    <div>
+                      Alcohol: {experienceInformation.experience.perks.alcohol}
+                    </div>
+                  )}
+                  {experienceInformation.experience.perks.equipment && (
+                    <div>
+                      Equipment:{" "}
+                      {experienceInformation.experience.perks.equipment}
+                    </div>
+                  )}
+                  {experienceInformation.experience.perks.others && (
+                    <div>
+                      Others: {experienceInformation.experience.perks.others}
+                    </div>
+                  )}
+                </>
+              )}
             </dd>
 
             <div
@@ -889,7 +912,7 @@ export default function EditPost() {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleUpdateperks}
+                  onClick={handleUpdatePerks}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
@@ -916,17 +939,24 @@ export default function EditPost() {
             </dt>
 
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {experienceInformation?.experience?.minimumAge &&
-                `Minimum age: ${experienceInformation?.experience?.minimumAge} years-old`}
-              <br />
-              {experienceInformation?.experience?.kidsAllowed &&
-                "Guest can bring kids under 4 years"}
-              <br />
-              {experienceInformation?.experience?.petsAllowed &&
-                "Guest can bring their pets"}
-              <br />
-              {experienceInformation?.experience?.maxGuest &&
-                `Maximun group size: ${experienceInformation?.experience?.maxGuest} persons`}
+              {experienceInformation?.experience?.minimumAge && (
+                <div>
+                  Minimum age: {experienceInformation.experience.minimumAge}{" "}
+                  years-old
+                </div>
+              )}
+              {experienceInformation?.experience?.kidsAllowed && (
+                <div>Guest can bring kids under 4 years</div>
+              )}
+              {experienceInformation?.experience?.petsAllowed && (
+                <div>Guest can bring their pets</div>
+              )}
+              {experienceInformation?.experience?.maxGuest && (
+                <div>
+                  Maximum group size:{" "}
+                  {experienceInformation.experience.maxGuest} persons
+                </div>
+              )}
             </dd>
 
             <div
@@ -1065,11 +1095,19 @@ export default function EditPost() {
             <dt className="text-sm font-medium text-gray-500">Language</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               {experienceInformation?.experience?.language &&
-                experienceInformation?.experience?.language.map((option) => (
-                  <span key={option} className="mr-2">
-                    {option}
-                  </span>
-                ))}
+              experienceInformation?.experience?.language.length > 0 ? (
+                <div>
+                  {experienceInformation?.experience?.language.map(
+                    (option, index) => (
+                      <span key={index} className="mr-2">
+                        {option}
+                      </span>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div>No languages specified</div>
+              )}
             </dd>
             <div
               onClick={() => setOpenInputLanguage(!openInputLanguage)}
@@ -1136,8 +1174,7 @@ export default function EditPost() {
                 `Date: ${format(
                   parseISO(experienceInformation?.experience?.startDate),
                   "MM/dd/yyyy"
-                )} to 
-                ${format(
+                )} to ${format(
                   parseISO(experienceInformation?.experience?.endDate),
                   "MM/dd/yyyy"
                 )}`}
@@ -1156,7 +1193,7 @@ export default function EditPost() {
             {openInputTime && (
               <div className="col-span-6 sm:col-span-3">
                 <label
-                  htmlFor="age"
+                  htmlFor="startTime"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Start time
@@ -1165,8 +1202,8 @@ export default function EditPost() {
                   please set time experience start time for guests.
                 </div>
                 <select
-                  id="time"
-                  name="time"
+                  id="startTime"
+                  name="startTime"
                   autoComplete="off"
                   onChange={(e) => setStartTime(e.target.value)}
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
@@ -1222,7 +1259,7 @@ export default function EditPost() {
                   <option value="11:30 PM">11:30 PM</option>
                 </select>
                 <label
-                  htmlFor="age"
+                  htmlFor="endTime"
                   className="mt-6 block text-sm font-medium leading-6 text-gray-900"
                 >
                   End time
@@ -1231,8 +1268,8 @@ export default function EditPost() {
                   please set time experience end time for guests.
                 </div>
                 <select
-                  id="time"
-                  name="time"
+                  id="endTime"
+                  name="endTime"
                   autoComplete="off"
                   onChange={(e) => setEndTime(e.target.value)}
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
@@ -1351,20 +1388,22 @@ export default function EditPost() {
                       </span>
                     </div>
                   ))
-                : experienceInformation?.experience?.tags?.map((tag, index) => (
-                    <div
-                      key={index}
-                      className="inline-flex items-center justify-center py-1 px-2 bg-gray border rounded-full mr-2"
-                    >
-                      <span className="mr-2">{tag}</span>
-                      <span
-                        onClick={() => handleDeleteTag(index)}
-                        className="inline-flex items-center justify-center w-5 h-5 pb-1 border rounded-full bg-red-600 text-white text-lg cursor-pointer"
+                : (experienceInformation?.experience?.tags || []).map(
+                    (tag, index) => (
+                      <div
+                        key={index}
+                        className="inline-flex items-center justify-center py-1 px-2 bg-gray border rounded-full mr-2"
                       >
-                        &times;
-                      </span>
-                    </div>
-                  ))}
+                        <span className="mr-2">{tag}</span>
+                        <span
+                          onClick={() => handleDeleteTag(index)}
+                          className="inline-flex items-center justify-center w-5 h-5 pb-1 border rounded-full bg-red-600 text-white text-lg cursor-pointer"
+                        >
+                          &times;
+                        </span>
+                      </div>
+                    )
+                  )}
             </dd>
             <div
               onClick={() => setOpenInputTags(!openInputTags)}
@@ -1426,10 +1465,9 @@ export default function EditPost() {
           {/* Price */}
           <div className="px-4 py-10 border-b sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Price</dt>
-
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {experienceInformation.experience.currency}{" "}
-              {experienceInformation.experience.price}
+              {experienceInformation?.experience?.currency}{" "}
+              {experienceInformation?.experience?.price}
             </dd>
 
             <div
@@ -1520,14 +1558,7 @@ export default function EditPost() {
             </dt>
 
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {experienceInformation?.experience?.country &&
-                `${experienceInformation?.experience?.country},`}{" "}
-              {experienceInformation?.experience?.city &&
-                `${experienceInformation?.experience?.city},`}{" "}
-              {experienceInformation?.experience?.state &&
-                `${experienceInformation?.experience?.state},`}{" "}
-              {experienceInformation?.experience?.address &&
-                experienceInformation?.experience?.address}
+              {experienceInformation?.experience?.fullAddress}
             </dd>
 
             <div
@@ -1553,7 +1584,7 @@ export default function EditPost() {
                     name="address"
                     id="address"
                     autoComplete="address-line1"
-                    onChange={(e) => setAddress(e.target.value)}
+                    // onChange={(e) => setAddress(e.target.value)}
                     className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                   />
                 </AddressAutofill>
@@ -1572,7 +1603,7 @@ export default function EditPost() {
                   id="country"
                   name="country"
                   autoComplete="country-name"
-                  onChange={(e) => setCountry(e.target.value)}
+                  // onChange={(e) => setCountry(e.target.value)}
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 ></input>
               </div>
@@ -1590,7 +1621,7 @@ export default function EditPost() {
                   name="state"
                   id="state"
                   autoComplete="address-level1"
-                  onChange={(e) => setState(e.target.value)}
+                  // onChange={(e) => setState(e.target.value)}
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -1607,7 +1638,7 @@ export default function EditPost() {
                   type="text"
                   name="city"
                   id="city"
-                  onChange={(e) => setCity(e.target.value)}
+                  // onChange={(e) => setCity(e.target.value)}
                   autoComplete="address-level2"
                   className="mt-2 block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                 />
@@ -1733,9 +1764,9 @@ export default function EditPost() {
             </dt>
 
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {experienceInformation.experience.cancellation1 === true &&
+              {experienceInformation?.experience?.cancellation1 &&
                 "Guests can cancel until 7 days before the Experience start time for a full refund, or within 24 hours of booking as long as the booking is made more than 48 hours before the start time."}{" "}
-              {experienceInformation.experience.cancellation2 === true &&
+              {experienceInformation?.experience?.cancellation2 &&
                 "Guests can cancel until 24 hours before the Experience start time for a full refund."}
             </dd>
 
