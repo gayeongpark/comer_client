@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import Comment from "./Comment";
 
 export default function Comments({ experienceId }) {
@@ -13,7 +13,7 @@ export default function Comments({ experienceId }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const { data } = await axios.get(`/comments/${experienceId}`, {
+        const { data } = await jwtInterceptor.get(`/comments/${experienceId}`, {
           withCredentials: true,
         });
         // console.log(data);
@@ -27,18 +27,18 @@ export default function Comments({ experienceId }) {
   const handleCommentSubmit = async (event) => {
     if (event.key === "Enter") {
       try {
-        const response = await axios.post(
+        const response = await jwtInterceptor.post(
           "/comments/",
           {
             description: newComment,
             experienceId: experienceId,
           },
           {
-            headers: { "Content-Type": "application/json" },
+            headers: { "content-Type": "application/json" },
             withCredentials: true,
           }
         );
-        console.log(response.data);
+        // console.log(response.data);
         // fetchComments();
         setComments((comments) => [response.data, ...comments]);
         setNewComment("");

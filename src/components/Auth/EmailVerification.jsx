@@ -1,26 +1,38 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import jwtInterceptor from "../../interceptors/axios";
 
+// This is the component that will be executed, when user verified the email clicking the provided url
 export default function EmailVerification() {
+  // Extract the "token" from the URL parameters using the "useParams" hook
   const { token } = useParams();
+
+  // Get the dispatch function from Redux to dispatch actions
   const dispatch = useDispatch();
 
+  // Use the "useEffect" hook to fetch email verification data when the component mounts
   useEffect(() => {
+    // Define an asynchronous function to fetch email verification data
     const fetchEmailVerifiedData = async () => {
       try {
-        const emailVerifiedData = await axios.get(`/auth/verifyEmail/${token}`);
+        // Send a GET request to the server to verify the email with the provided token
+        const emailVerifiedData = await jwtInterceptor.get(`/auth/verifyEmail/${token}`);
+        // Extract the verified user data from the response
         const verifiedUserData = emailVerifiedData.data;
+        // Dispatch the verified user data to the Redux store for state management
         dispatch(verifiedUserData);
       } catch (error) {}
     };
+    // Call the "fetchEmailVerifiedData" function when the component mounts
     fetchEmailVerifiedData();
   }, [token, dispatch]);
+  // [token, dispatch] is an array of dependencies that tells the useEffect hook to re-run the effect whenever the token value changes (typically due to a change in URL parameters) or if the dispatch function changes (although this is less likely to change in practice).
+  // This ensures that the effect is executed with the latest values of these dependencies when necessary.
 
   return (
-    <div className="isolate bg-white py-24 px-6 sm:py-32 lg:px-8">
+    <main className="isolate bg-white py-24 px-6 sm:py-32 lg:px-8">
       <div className="mx-auto max-w-xl text-center">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Email verified
@@ -30,6 +42,7 @@ export default function EmailVerification() {
           making friends.
         </p>
         <div>
+          {/* It makes user redirect to the login page */}
           <Link to="/login">
             <button
               type="button"
@@ -40,6 +53,6 @@ export default function EmailVerification() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

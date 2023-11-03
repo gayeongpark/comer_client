@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import { setAuthUser } from "../../redux/authSlice";
 import { Link, useParams } from "react-router-dom";
 import ProfileSK from "./ProfileSK";
@@ -57,7 +57,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await axios.get(`/users/${id}`, {
+        const userData = await jwtInterceptor.get(`/users/${id}`, {
           withCredentials: true,
         });
         setUserProfile(userData.data);
@@ -72,9 +72,9 @@ export default function Profile() {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
-      const update = await axios.put(`/users/update/${id}`, formData, {
+      const update = await jwtInterceptor.put(`/users/update/${id}`, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "content-Type": "multipart/form-data",
         },
         withCredentials: true,
       });

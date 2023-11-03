@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
@@ -16,7 +16,7 @@ export default function BookedExperience() {
     const fetchBookings = async () => {
       try {
         // Make an HTTP request to your backend API to fetch bookings for the specified user
-        const response = await axios.get(
+        const response = await jwtInterceptor.get(
           `/experiences/bookedExperience/${userId}`
         );
         // Set the bookings in the state
@@ -33,7 +33,7 @@ export default function BookedExperience() {
   // console.log(bookings);
 
   const cancelBooking = async (bookingId) => {
-    console.log(bookingId);
+    // console.log(bookingId);
     // Display a confirmation dialog to ensure the user wants to cancel the booking
     const confirmCancel = window.confirm(
       "Are you sure you want to cancel this booking?"
@@ -42,7 +42,7 @@ export default function BookedExperience() {
     if (confirmCancel) {
       try {
         // Make an HTTP request to your backend to cancel the booking
-        await axios.delete(`/experiences/cancel-booking/${bookingId}`);
+        await jwtInterceptor.delete(`/experiences/cancel-booking/${bookingId}`);
         // Remove the canceled booking from the state or reload the bookings
         // You may need to update the bookings state accordingly
         navigate("/"); // Redirect to the home page to make user explore more posts.
@@ -73,7 +73,6 @@ export default function BookedExperience() {
                     <p className="flex text-lg items-center justify-center">
                       {booking.startTime} - {booking.endTime}
                     </p>
-                    {/* <Link to={`/product/${post._id}`}> */}
                     <Link to={`/product/${booking.experienceId}`}>
                       <p className="flex text-2xl items-center justify-center">
                         {booking.experienceTitle}

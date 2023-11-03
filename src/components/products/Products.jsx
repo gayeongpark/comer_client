@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import jwtInterceptor from "../../interceptors/axios";
 import { BsHeartFill } from "react-icons/bs";
 import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
@@ -9,7 +8,7 @@ import { Link } from "react-router-dom";
 export default function Products() {
   const [newProductData, setNewProductData] = useState([]);
 
-  const authUser = useSelector((state) => state.authUser.value);
+  // const authUser = useSelector((state) => state.authUser.value);
 
   const handleMove = (direction, idx) => {
     let newSlideNumber;
@@ -34,7 +33,7 @@ export default function Products() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("/experiences");
+        const response = await jwtInterceptor.get("/experiences");
         const products = response.data;
         setNewProductData(
           products.map((product) => ({
@@ -51,7 +50,6 @@ export default function Products() {
 
   const handleLikes = async (productId) => {
     try {
-      await axios.put(`/users/likes/${productId}`);
       setNewProductData((prevData) =>
         prevData.map((product) =>
           product._id === productId
@@ -59,13 +57,14 @@ export default function Products() {
             : product
         )
       );
+      await jwtInterceptor.put(`/users/likes/${productId}`);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <>
+    <main>
       <div className="bg-white">
         <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-16 sm:text-4xl">
@@ -74,7 +73,7 @@ export default function Products() {
           <h2 className="sr-only">Products</h2>
           <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {newProductData?.map((product, idx) => {
-              // console.log('Product:', product);
+              // console.log('Product:', product._id);
               return (
                 <div key={product._id} href={product.href} className="group">
                   <div className="relative aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
@@ -112,7 +111,7 @@ export default function Products() {
                         className="flex absolute justify-end mt-2 mr-5 text-3xl text-red-700"
                         onClick={() => handleLikes(product._id)}
                       >
-                        {product.likes.includes(authUser.id) ? (
+                        {product.isLiked ? (
                           <BsHeartFill />
                         ) : (
                           <BsHeartFill className="text-white" />
@@ -142,6 +141,6 @@ export default function Products() {
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 }

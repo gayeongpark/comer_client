@@ -4,8 +4,7 @@ import { DateRangePicker } from "react-date-range";
 import { MdOutlineCancel } from "react-icons/md";
 import { format, parseISO } from "date-fns";
 import { AddressAutofill, AddressMinimap } from "@mapbox/search-js-react";
-import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import jwtInterceptor from "../../interceptors/axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -184,7 +183,7 @@ export default function EditPost({ postId }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await axios.get(`/experiences/${postId}`, {
+        const userData = await jwtInterceptor.get(`/experiences/${postId}`, {
           headers: {
             "content-Type": "application/json",
           },
@@ -207,7 +206,7 @@ export default function EditPost({ postId }) {
       }
     }
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateImage`,
         formData,
         {
@@ -229,7 +228,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateTitle = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateTitle`,
         { title },
         {
@@ -251,7 +250,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateDescription = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateDescription`,
         { description },
         {
@@ -272,7 +271,7 @@ export default function EditPost({ postId }) {
   };
   const handleUpdatePerks = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updatePerks`,
         {
           perks,
@@ -294,9 +293,10 @@ export default function EditPost({ postId }) {
     }
   };
 
-  const handleUpdateGuestRequirements = async () => {
+  const handleUpdateGuestRequirements = async (event) => {
     try {
-      const response = await axios.put(
+      event.preventDefault();
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateGuestRequirements`,
         {
           minimumAge: Number(minimumAge),
@@ -325,7 +325,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateLanguage = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateLanguage`,
         {
           language: JSON.stringify(language),
@@ -349,7 +349,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateTags = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateTags`,
         {
           tags: JSON.stringify(tags),
@@ -373,7 +373,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateNotice = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateNotice`, // Adjust the API endpoint as needed
         {
           notice, // Send the updated notice
@@ -400,7 +400,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateCancellation = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateCancellation`, // Adjust the API endpoint as needed
         {
           cancellation1, // Send the updated cancellation1 value
@@ -427,9 +427,10 @@ export default function EditPost({ postId }) {
     }
   };
 
-  const handleUpdateAddress = async () => {
+  const handleUpdateAddress = async (event) => {
     try {
-      const responseAddress = await axios.put(
+      event.preventDefault();
+      const responseAddress = await jwtInterceptor.put(
         `/experiences/${postId}/updateLocation`,
         {
           address: feature?.properties?.address_line1,
@@ -462,7 +463,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdatePriceCurrency = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updatePriceCurrency`, // Adjust the API endpoint as needed
         {
           price: Number(price),
@@ -492,7 +493,7 @@ export default function EditPost({ postId }) {
 
   const handleUpdateAvailiability = async () => {
     try {
-      const response = await axios.put(
+      const response = await jwtInterceptor.put(
         `/experiences/${postId}/updateAvailiability`,
         {
           startTime,

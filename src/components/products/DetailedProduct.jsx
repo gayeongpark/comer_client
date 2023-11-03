@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import { useParams } from "react-router-dom";
 import { MdLocationOn, MdOutlinePets } from "react-icons/md";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ export default function DetailedProduct() {
       const updatedLikes = detailedProductData.experience.likes.filter(
         (id) => id !== authUser.id
       );
-      await axios.put(`/users/likes/${id}`, updatedLikes, {
+      await jwtInterceptor.put(`/users/likes/${id}`, updatedLikes, {
         withCredentials: true,
       });
     } else {
@@ -40,7 +40,7 @@ export default function DetailedProduct() {
         ...detailedProductData.experience.likes,
         authUser.id,
       ];
-      await axios.put(`/users/likes/${id}`, updatedLikes, {
+      await jwtInterceptor.put(`/users/likes/${id}`, updatedLikes, {
         headers: {
           "content-Type": "application/json",
         },
@@ -53,7 +53,7 @@ export default function DetailedProduct() {
   useEffect(() => {
     const fetchDetailedProductData = async () => {
       try {
-        const { data } = await axios.get(`/experiences/${id}`, {
+        const { data } = await jwtInterceptor.get(`/experiences/${id}`, {
           headers: {
             "content-Type": "application/json",
           },
@@ -116,8 +116,8 @@ export default function DetailedProduct() {
             </button>
           </div>
           {detailedProductData?.experience?.files?.length > 0 &&
-            detailedProductData?.experience?.files.map((photo) => (
-              <div key={photo}>
+            detailedProductData?.experience?.files.map((photo, index) => (
+              <div key={index}>
                 <img src={`http://localhost:8000/${photo}`} alt="allImage" />
               </div>
             ))}
@@ -218,10 +218,10 @@ export default function DetailedProduct() {
             <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
               <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <div className="flex flex-row mt-2">
-                  {detailedProductData?.experience?.tags.map((tag) => {
+                  {detailedProductData?.experience?.tags.map((tag, index) => {
                     return (
                       <div
-                        key={tag}
+                        key={index}
                         className="flex flex-row bg-red-700 rounded-full mr-2 text-white p-1"
                       >
                         <div className="px-2 py-1">#{tag}</div>
@@ -244,8 +244,8 @@ export default function DetailedProduct() {
                   <div className="mt-6">
                     <div className="flex flex-wrap justify-between gap-4 mt-3">
                       {detailedProductData?.availability[0]?.dateMaxGuestPairs.map(
-                        (dateMaxGuestPair) => (
-                          <div className="flex-auto" key={dateMaxGuestPair._id}>
+                        (dateMaxGuestPair, index) => (
+                          <div className="flex-auto" key={index}>
                             <div className="border-2 p-4 items-center rounded-md">
                               <div className="mb-4">
                                 <div className="flex text-xl font-bold">

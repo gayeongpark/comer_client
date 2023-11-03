@@ -5,11 +5,10 @@ import { DateRangePicker } from "react-date-range";
 import { MdOutlineCancel } from "react-icons/md";
 import { format } from "date-fns";
 import { AddressAutofill, AddressMinimap } from "@mapbox/search-js-react";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 
 export default function Posting() {
   const navigate = useNavigate();
@@ -180,9 +179,9 @@ export default function Posting() {
     formData.append("cancellation2", cancellation2);
 
     try {
-      await axios.post("/experiences/createExperience", formData, {
+      await jwtInterceptor.post("/experiences/createExperience", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "content-Type": "multipart/form-data",
         },
         withCredentials: true,
       });
@@ -192,8 +191,7 @@ export default function Posting() {
         navigate("/");
       }, 2000); // wait for 2 seconds before navigating to home page
     } catch (error) {
-      console.error(error.response.data);
-      setError(error.message);
+      setError(error.response.data.error);
     }
   };
 

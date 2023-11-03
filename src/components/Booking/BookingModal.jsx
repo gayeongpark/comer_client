@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ export default function BookingModal({
       try {
         if (open) {
           // Make an HTTP request to your back-end route using async/await
-          const response = await axios.get(`/experiences/${experienceId}`);
+          const response = await jwtInterceptor.get(`/experiences/${experienceId}`);
           // Handle the response and set the data as needed
           setExperienceData(response.data);
         }
@@ -38,7 +38,7 @@ export default function BookingModal({
   const handleBookingPayment = async () => {
     try {
       // Fetch the client secret from your server
-      await axios.post(
+      await jwtInterceptor.post(
         `/experiences/booking/create-payment-intent`,
         {
           experienceId,

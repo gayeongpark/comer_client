@@ -4,9 +4,13 @@ import { useNavigate } from "react-router-dom";
 //In this case, interceptors are being used to automatically refresh the user's access token when it has expired.
 //By using an interceptor, the process of refreshing the access token can be handled automatically without the need for the user to manually log in again, providing a better user experience.
 
+const jwtInterceptor = axios.create({});
+
 // Define a function to intercept responses from Axios requests.
-axios.interceptors.response.use(
-  (response) => response, // If the response is successful, just return it without modifications.
+jwtInterceptor.interceptors.response.use(
+  (response) => {
+    return response;
+  }, // If the response is successful, just return it without modifications.
   async (error) => {
     let refresh = false; // Initialize a variable to keep track of whether a token refresh is in progress.
     const navigate = useNavigate(); // Get the navigation function from react-router-dom.
@@ -57,3 +61,5 @@ axios.interceptors.response.use(
     }
   }
 );
+
+export default jwtInterceptor

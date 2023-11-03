@@ -4,7 +4,7 @@ import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 
 export default function Reset() {
   const navigate = useNavigate();
@@ -30,8 +30,8 @@ export default function Reset() {
       password2,
     };
     try {
-      await axios.post("/auth/resetPassword", response, {
-        headers: { "Content-Type": "application/json" },
+      await jwtInterceptor.post("/auth/resetPassword", response, {
+        headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
       setSuccessMessage(

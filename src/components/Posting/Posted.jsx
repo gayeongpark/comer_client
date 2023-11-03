@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -13,7 +13,9 @@ export default function Posted() {
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
-        const response = await axios.get(`/experiences/profile/${authUser.id}`);
+        const response = await jwtInterceptor.get(
+          `/experiences/profile/${authUser.id}`
+        );
         setUserPosts(response.data);
       } catch (error) {
         console.error(error);
@@ -32,7 +34,7 @@ export default function Posted() {
       alert("Do you want to delete this experience?");
       setLoadingDelete(true); // set loading state to true
       setDeletingPostId(postId);
-      await axios.delete(`/experiences/deleteAExperience/${postId}`, {
+      await jwtInterceptor.delete(`/experiences/deleteAExperience/${postId}`, {
         withCredentials: true,
       });
       setUserPosts((oldValues) => {

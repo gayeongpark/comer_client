@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
+import jwtInterceptor from "../../interceptors/axios";
 
 export default function Comment({ comment }) {
   const [commentOwner, setCommentOwner] = useState({});
@@ -15,7 +15,9 @@ export default function Comment({ comment }) {
       if (!comment.userId) {
         throw new Error("Comment does not have an userId property.");
       }
-      const response = await axios.get(`/users/comments/${comment.userId}`);
+      const response = await jwtInterceptor.get(
+        `/users/comments/${comment.userId}`
+      );
       setCommentOwner(response.data);
     };
     fetchCommentOwner();
@@ -43,7 +45,7 @@ export default function Comment({ comment }) {
         throw new Error("Comment does not have an _id property.");
       }
       setLoadingDelete(true); // set loading state to true
-      await axios.delete(`/comments/delete/${comment._id}`, {
+      await jwtInterceptor.delete(`/comments/delete/${comment._id}`, {
         withCredentials: true,
       });
       setDeleted(true); // set deleted state to true
@@ -73,7 +75,7 @@ export default function Comment({ comment }) {
             fill="currentFill"
           />
         </svg>
-        <span class="sr-only">Loading...</span>
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
