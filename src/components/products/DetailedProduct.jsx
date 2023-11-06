@@ -32,6 +32,9 @@ export default function DetailedProduct() {
         (id) => id !== authUser.id
       );
       await jwtInterceptor.put(`/users/likes/${id}`, updatedLikes, {
+        headers: {
+          "content-Type": "application/json",
+        },
         withCredentials: true,
       });
     } else {
@@ -249,7 +252,7 @@ export default function DetailedProduct() {
                             <div className="border-2 p-4 items-center rounded-md">
                               <div className="mb-4">
                                 <div className="flex text-xl font-bold">
-                                  {dateMaxGuestPair.date.split("T")[0]}
+                                  {dateMaxGuestPair.date.split("T")[0]} 
                                 </div>
                                 <div className="font-light">
                                   {dateMaxGuestPair.startTime} -{" "}

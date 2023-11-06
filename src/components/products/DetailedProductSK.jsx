@@ -1,5 +1,6 @@
 import React from "react";
-
+// This is the component for the detailedProduct component
+// It should be updated
 export default function DetailedProductSK() {
   return (
     <div>

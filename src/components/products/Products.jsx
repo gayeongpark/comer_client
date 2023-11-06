@@ -1,62 +1,83 @@
 import React, { useEffect, useState } from "react";
-import jwtInterceptor from "../../interceptors/axios";
+import jwtInterceptor from "../../interceptors/axios"; // Import Axios instance with JWT interceptor
 import { BsHeartFill } from "react-icons/bs";
 import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 export default function Products() {
+  // Define a state variable "newProductData" and its updater function "setNewProductData"
   const [newProductData, setNewProductData] = useState([]);
 
-  // const authUser = useSelector((state) => state.authUser.value);
-
+  // Function to handle sliding images left or right
+  // It takes two parameters direction and index
+  // direction is a string that specifies the direction of the slid(l: left, r: right)
+  // idx is to indentify specific picture
   const handleMove = (direction, idx) => {
-    let newSlideNumber;
-    const updateState = [...newProductData];
+    let newSlideNumber; // Store the updated slide number.
+    const updateState = [...newProductData]; // Create a shallow copy of an array or object called newProductData in order to make modifications to the data without directly mutating the original data
 
     if (direction === "l") {
+      // If left direction is requested
+      // If direction is "l" (left), it checks if the current slide number for the product at index idx is 0.
+      // If it is, it sets the newSlideNumber to the last index of the product's files array; otherwise, it decrements the slide number by 1
+      // slideNumber is index of its pictures
       newSlideNumber =
         newProductData[idx].slideNumber === 0
           ? newProductData[idx].files.length - 1
           : newProductData[idx].slideNumber - 1;
     } else if (direction === "r") {
+      // If right direction is requested
+      // If direction is "r" (right), it checks if the current slide number for the product at index idx is the last index of the product's files array.
+      // If it is, it sets the newSlideNumber to 0; otherwise, it increments the slide number by 1.
       newSlideNumber =
         newProductData[idx].slideNumber === newProductData[idx].files.length - 1
           ? 0
           : newProductData[idx].slideNumber + 1;
     }
 
-    updateState[idx].slideNumber = newSlideNumber;
-    setNewProductData(updateState);
+    updateState[idx].slideNumber = newSlideNumber; // Update the slide number for a specific product
+    setNewProductData(updateState); // Update the state with the modified data
   };
 
   useEffect(() => {
     async function fetchData() {
       try {
+        // GET request to fetch product data from the server
         const response = await jwtInterceptor.get("/experiences");
-        const products = response.data;
+        const products = response.data; // Extract and save the product data from the response
+        // Update the state with the product data, adding a "slideNumber" property
         setNewProductData(
           products.map((product) => ({
             ...product,
-            slideNumber: 0,
+            slideNumber: 0, // Initialize the slide number to 0
           }))
         );
       } catch (error) {
         console.error(error);
       }
     }
-    fetchData();
-  }, []);
+    fetchData(); // Call the fetchData function when this component is mounted
+  }, []); // This useEffect only runs once when the component is mounted
 
+  // Function to handle liking/unliking a product
+  // productId is to indentify which product the user likes
   const handleLikes = async (productId) => {
     try {
-      setNewProductData((prevData) =>
-        prevData.map((product) =>
-          product._id === productId
-            ? { ...product, isLiked: !product.isLiked }
-            : product
-        )
+      // Update the state to toggle the "isLiked" property for a specific product
+      setNewProductData(
+        (prevData) =>
+          prevData.map((product) =>
+            // Check if the product._id matches the productId provided as a parameter to the function
+            // making a shallow copy of the state object and then updating the copy is to maintain immutability and ensure that state changes are handled correctly
+            product._id === productId
+              ? { ...product, isLiked: !product.isLiked }
+              : product
+          )
+        // If the product._id doesn't match the productId, it simply returns the original product object without making any changes
+        // If it does match the productId, It will create new object based on an existing object while updating a specific property within the object
       );
+      // Make an HTTP PUT request to update the user's likes for a specific product
       await jwtInterceptor.put(`/users/likes/${productId}`);
     } catch (error) {
       console.error(error);

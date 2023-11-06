@@ -3,6 +3,8 @@ import jwtInterceptor from "../../interceptors/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+// This is the modal for booking an experience slot
+// These arguments were passed from the detailedProduct component in order to make modal
 export default function BookingModal({
   open,
   experienceId,
@@ -10,21 +12,26 @@ export default function BookingModal({
   onClose,
 }) {
   const [experienceData, setExperienceData] = useState("");
+
+  // Retrieve the authenticated user data from the Redux store
   const authUser = useSelector((state) => state.authUser.value);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // If open is true
         if (open) {
           // Make an HTTP request to your back-end route using async/await
-          const response = await jwtInterceptor.get(`/experiences/${experienceId}`);
+          const response = await jwtInterceptor.get(
+            `/experiences/${experienceId}`
+          );
           // Handle the response and set the data as needed
           setExperienceData(response.data);
         }
       } catch (error) {
-        // Handle errors, e.g., show an error message
-        console.error("Failed to fetch data from the back-end:", error);
+        console.error("Failed to fetch data:", error);
       }
     };
     fetchData();
@@ -35,10 +42,11 @@ export default function BookingModal({
 
   if (!open) return null;
 
+  // Function to handle booking payment
   const handleBookingPayment = async () => {
     try {
-      // Fetch the client secret from your server
-      await jwtInterceptor.post(
+      // Make post request to make booking slot for this booking
+      const response = await jwtInterceptor.post(
         `/experiences/booking/create-payment-intent`,
         {
           experienceId,
@@ -50,10 +58,14 @@ export default function BookingModal({
           headers: { "content-Type": "application/json" },
         }
       );
-      navigate(`/bookedExperience/${authUser.id}`);
+      if (response.status === 200) {
+        // Show a success message to the user and navigate to the booked experience page
+        alert(response.data.message);
+        navigate(`/bookedExperience/${authUser.id}`);
+      }
     } catch (error) {
-      console.error("Failed to make a payment:", error);
-      // Handle the error, e.g., display an error message to the user.
+      // Handle any errors that occur during the payment process
+      alert("Error: " + error.response.data.error);
     }
   };
 

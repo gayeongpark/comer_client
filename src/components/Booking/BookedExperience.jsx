@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import jwtInterceptor from "../../interceptors/axios";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function BookedExperience() {
-  const { userId } = useParams();
+  const { userId } = useParams(); // Get the 'userId' parameter from the route
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Use useNavigate here
+  const [loading, setLoading] = useState(true); // Loading state
+
+  // Get the authenticated user data from the Redux store
   const authUser = useSelector((state) => state.authUser.value);
 
+  // Get booked experience data
   useEffect(() => {
     // Define a function to fetch the booking data
     const fetchBookings = async () => {
@@ -32,36 +33,47 @@ export default function BookedExperience() {
   }, [userId]);
   // console.log(bookings);
 
+  // This is the cancelBooking function with the given booking id
   const cancelBooking = async (bookingId) => {
-    // console.log(bookingId);
     // Display a confirmation dialog to ensure the user wants to cancel the booking
     const confirmCancel = window.confirm(
       "Are you sure you want to cancel this booking?"
     );
 
+    // If user clicks yes === true
     if (confirmCancel) {
       try {
         // Make an HTTP request to your backend to cancel the booking
-        await jwtInterceptor.delete(`/experiences/cancel-booking/${bookingId}`);
-        // Remove the canceled booking from the state or reload the bookings
-        // You may need to update the bookings state accordingly
-        navigate("/"); // Redirect to the home page to make user explore more posts.
+        const response = await jwtInterceptor.delete(
+          `/experiences/cancel-booking/${bookingId}`
+        );
+
+        // Check the response from the server
+        if (response.status === 200) {
+          // Show a success message to the user if the cancellation was successful
+          alert(response.data.message);
+          // Reload the page after a successful cancellation
+          window.location.reload();
+        }
       } catch (error) {
-        console.error("Failed to cancel the booking:", error);
-        // Handle the error, e.g., display an error message to the user
+        // Handle network or other unexpected errors
+        alert("Failed to cancel the booking: " + error.response.data);
       }
     }
   };
+
   return (
     <main>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden bg-white py-5 sm:rounded-lg">
+          {/* Maps through the bookings array to display booking information for the authenticated user.  */}
           {bookings.map((bookingGroup, groupIndex) => (
             <article key={groupIndex}>
+              {/* The reason why I maped twice is that booking slot data is located in bookings.booking */}
               {bookingGroup.booking
-                .filter((booking) => booking.userEmail === authUser.email)
+                .filter((booking) => booking.userEmail === authUser.email) // Filter bookings for the authenticated user
                 .map((booking, index) => (
                   <div
                     key={index}
@@ -69,16 +81,19 @@ export default function BookedExperience() {
                   >
                     <p className="flex text-xl items-center justify-center">
                       {booking.date.split("T")[0]}
+                      {/* To display only date */}
                     </p>
                     <p className="flex text-lg items-center justify-center">
                       {booking.startTime} - {booking.endTime}
                     </p>
+                    {/* If user clicks the title, user will be navigated to the detailed page */}
                     <Link to={`/product/${booking.experienceId}`}>
                       <p className="flex text-2xl items-center justify-center">
                         {booking.experienceTitle}
                       </p>
                     </Link>
                     <div>
+                      {/* The arrow function calls the cancelBooking function with the booking._id as its argument. It is to pass the id to the cancelBooking function */}
                       <button
                         className="flex rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         onClick={() => cancelBooking(booking._id)}

@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import jwtInterceptor from "../../interceptors/axios";
 import Comment from "./Comment";
 
+// This component to display to comments
+// The experienceId was passed from DetailedProduct component
 export default function Comments({ experienceId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");

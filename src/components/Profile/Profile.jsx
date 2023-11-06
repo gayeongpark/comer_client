@@ -7,17 +7,21 @@ import { Link, useParams } from "react-router-dom";
 import ProfileSK from "./ProfileSK";
 import "react-phone-input-2/lib/style.css";
 
+// This is the component for profile page
+// It does need to be refactored
 export default function Profile() {
+  // State to control the visibility of input fields for various user profile data
   const [openInputImage, setOpenInputImage] = useState(false);
   const [openInputName, setOpenInputName] = useState(false);
   const [openInputPhone, setOpenInputPhone] = useState(false);
   const [openInputAddress, setOpenInputAddress] = useState(false);
   const [openInputIntro, setOpenInputIntro] = useState(false);
 
+  // State to manage loading status and user profile data
   const [isLoading, setIsLoading] = useState(true);
-
   const [userProfile, setUserProfile] = useState("");
 
+  // State to store form data for user profile
   const [formData, setFormData] = useState({
     firstName: userProfile?.firstName,
     lastName: userProfile?.lastName,
@@ -31,30 +35,39 @@ export default function Profile() {
     description: userProfile?.description,
   });
 
+  // Function to handle form input changes
   const handleChange = (e) => {
+    // Extract the name and value properties from the event target
     const { name, value } = e.target;
+    // Update the formData state using the setFormData function
     setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
+      ...prevFormData, // Copy the previous form data
+      [name]: value, // Update the property with the provided name
     }));
   };
 
+  // Function to handle profile image change
   const handleProfileImageChange = (e) => {
+    // Access the selected file from the input field
     const file = e.target.files[0];
     // console.log(file);
+    // Update the formData state with the selected file
     setFormData((prevFormData) => ({
-      ...prevFormData,
-      profilePicture: file,
+      ...prevFormData, // Copy the previous form data
+      profilePicture: file, // Update the 'profilePicture' property with the selected file
     }));
   };
 
+  // Access the authenticated user from the Redux store
   const authUser = useSelector((state) => state.authUser.value);
 
   const dispatch = useDispatch();
 
+  // Get the user ID from the route parameters
   const { id } = useParams();
 
   useEffect(() => {
+    // Fetch user data from the server when the component mounts
     const fetchUserData = async () => {
       try {
         const userData = await jwtInterceptor.get(`/users/${id}`, {
@@ -69,26 +82,32 @@ export default function Profile() {
     fetchUserData();
   }, [id, authUser]);
 
+  // Function to handle user profile update
   const handleUpdateUser = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default form submission behavior
     try {
+      // Send a PUT request to update the user's profile information
       const update = await jwtInterceptor.put(`/users/update/${id}`, formData, {
         headers: {
-          "content-Type": "multipart/form-data",
+          "content-Type": "multipart/form-data", // Set the request content type to multipart/form-data
         },
-        withCredentials: true,
+        withCredentials: true, // Include credentials (e.g., cookies) with the request
       });
+      // Retrieve the updated user data from the response
       const updatedUserData = update.data;
       // console.log(updatedUserData);
       // console.log(userProfile.profilePicture);
       // console.log('Updated image path:', updatedUserData.profilePicture);
+      // Dispatch an action to update the user's data in the Redux store
       dispatch(setAuthUser(updatedUserData));
+      // Clear the form data, although this part may not work as intended
       setFormData((prevFormData) => ({
-        ...prevFormData,
-        formData,
+        ...prevFormData, // Copy the previous data
+        formData: {}, // Update the form data
       }));
     } catch (error) {
       console.error("Error updating user:", error);
+      // Dispatch an action to set the user as unauthenticated (possibly to handle unauthorized access)
       dispatch(setAuthUser(false));
     }
   };
