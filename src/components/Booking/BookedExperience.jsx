@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import jwtInterceptor from "../../interceptors/axios";
 import { useSelector } from "react-redux";
 
@@ -7,7 +7,7 @@ export default function BookedExperience() {
   const { userId } = useParams(); // Get the 'userId' parameter from the route
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
-
+  const navigate = useNavigate(); // Get the navigation function for routing
   // Get the authenticated user data from the Redux store
   const authUser = useSelector((state) => state.authUser.value);
 
@@ -61,7 +61,7 @@ export default function BookedExperience() {
           // Show a success message to the user if the cancellation was successful
           alert(response.data.message);
           // Reload the page after a successful cancellation
-          window.location.reload();
+          navigate("/");
         }
       } catch (error) {
         // Handle network or other unexpected errors
