@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
@@ -17,7 +18,7 @@ import { useSelector } from "react-redux";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
+const navigate = useNavigate(); // Get the navigation function for routing
 export default function Navbar() {
   const dispatch = useDispatch();
 
@@ -36,7 +37,7 @@ export default function Navbar() {
         // Update the Redux state to indicate the user is no longer authenticated
         dispatch(setAuthUser(loggedOut));
         // Redirect the user to the login page
-        window.location.href = "https://comer-experience-app.onrender.com/login";
+        navigate("/login");;
       }
     } catch (error) {
       // If logout fails, update the Redux state accordingly
