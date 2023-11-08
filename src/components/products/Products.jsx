@@ -44,7 +44,10 @@ export default function Products() {
     async function fetchData() {
       try {
         // GET request to fetch product data from the server
-        const response = await jwtInterceptor.get("/experiences");
+        const response = await jwtInterceptor.get("/experiences", {
+          headers: { "content-Type": "application/json" },
+          withCredentials: true,
+        });
         const products = response.data; // Extract and save the product data from the response
         // Update the state with the product data, adding a "slideNumber" property
         setNewProductData(

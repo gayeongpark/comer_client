@@ -18,7 +18,13 @@ export default function EmailVerification() {
     const fetchEmailVerifiedData = async () => {
       try {
         // Send a GET request to the server to verify the email with the provided token
-        const emailVerifiedData = await jwtInterceptor.get(`/auth/verifyEmail/${token}`);
+        const emailVerifiedData = await jwtInterceptor.get(
+          `/auth/verifyEmail/${token}`,
+          {
+            headers: { "content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
         // Extract the verified user data from the response
         const verifiedUserData = emailVerifiedData.data;
         // Dispatch the verified user data to the Redux store for state management

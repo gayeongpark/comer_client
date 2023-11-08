@@ -16,7 +16,11 @@ export default function Comment({ comment }) {
         throw new Error("Comment does not have an userId property.");
       }
       const response = await jwtInterceptor.get(
-        `/users/comments/${comment.userId}`
+        `/users/comments/${comment.userId}`,
+        {
+          headers: { "content-Type": "application/json" },
+          withCredentials: true,
+        }
       );
       setCommentOwner(response.data);
     };
@@ -46,6 +50,7 @@ export default function Comment({ comment }) {
       }
       setLoadingDelete(true); // set loading state to true
       await jwtInterceptor.delete(`/comments/delete/${comment._id}`, {
+        headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
       setDeleted(true); // set deleted state to true

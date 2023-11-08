@@ -25,7 +25,11 @@ export default function BookingModal({
         if (open) {
           // Make an HTTP request to your back-end route using async/await
           const response = await jwtInterceptor.get(
-            `/experiences/${experienceId}`
+            `/experiences/${experienceId}`,
+            {
+              headers: { "content-Type": "application/json" },
+              withCredentials: true,
+            }
           );
           // Handle the response and set the data as needed
           setExperienceData(response.data);

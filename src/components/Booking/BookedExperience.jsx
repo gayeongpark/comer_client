@@ -18,7 +18,11 @@ export default function BookedExperience() {
       try {
         // Make an HTTP request to your backend API to fetch bookings for the specified user
         const response = await jwtInterceptor.get(
-          `/experiences/bookedExperience/${userId}`
+          `/experiences/bookedExperience/${userId}`,
+          {
+            headers: { "content-Type": "application/json" },
+            withCredentials: true,
+          }
         );
         // Set the bookings in the state
         setBookings(response.data.bookings);
@@ -45,7 +49,11 @@ export default function BookedExperience() {
       try {
         // Make an HTTP request to your backend to cancel the booking
         const response = await jwtInterceptor.delete(
-          `/experiences/cancel-booking/${bookingId}`
+          `/experiences/cancel-booking/${bookingId}`,
+          {
+            headers: { "content-Type": "application/json" },
+            withCredentials: true,
+          }
         );
 
         // Check the response from the server

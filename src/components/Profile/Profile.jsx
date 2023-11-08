@@ -71,6 +71,7 @@ export default function Profile() {
     const fetchUserData = async () => {
       try {
         const userData = await jwtInterceptor.get(`/users/${id}`, {
+          headers: { "content-Type": "multipart/form-data" },
           withCredentials: true,
         });
         setUserProfile(userData.data);

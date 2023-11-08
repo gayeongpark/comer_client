@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const jwtInterceptor = axios.create({
   baseURL: "https://comer-experience-app-server.onrender.com", // Replace with your server's base URL
-  withCredentials: true, // Send cookies with every request
 });
 
 // Define a function to intercept responses from Axios requests.

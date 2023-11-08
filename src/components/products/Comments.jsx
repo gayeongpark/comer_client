@@ -16,6 +16,7 @@ export default function Comments({ experienceId }) {
     const fetchComments = async () => {
       try {
         const { data } = await jwtInterceptor.get(`/comments/${experienceId}`, {
+          headers: { "content-Type": "application/json" },
           withCredentials: true,
         });
         // console.log(data);

@@ -14,7 +14,11 @@ export default function Posted() {
     const fetchUserPosts = async () => {
       try {
         const response = await jwtInterceptor.get(
-          `/experiences/profile/${authUser.id}`
+          `/experiences/profile/${authUser.id}`,
+          {
+            headers: { "content-Type": "application/json" },
+            withCredentials: true,
+          }
         );
         setUserPosts(response.data);
       } catch (error) {
@@ -35,6 +39,7 @@ export default function Posted() {
       setLoadingDelete(true); // set loading state to true
       setDeletingPostId(postId);
       await jwtInterceptor.delete(`/experiences/deleteAExperience/${postId}`, {
+        headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
       setUserPosts((oldValues) => {

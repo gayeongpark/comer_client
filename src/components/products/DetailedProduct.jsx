@@ -57,9 +57,6 @@ export default function DetailedProduct() {
     const fetchDetailedProductData = async () => {
       try {
         const { data } = await jwtInterceptor.get(`/experiences/${id}`, {
-          headers: {
-            "content-Type": "application/json",
-          },
           withCredentials: true,
         });
         setDetailedProductData(data);
