@@ -1,6 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
@@ -10,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { setAuthUser } from "../../redux/authSlice";
 import { useSelector } from "react-redux";
 
