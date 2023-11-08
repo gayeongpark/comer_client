@@ -101,7 +101,7 @@ export default function Navbar() {
                               <span className="sr-only">Open user menu</span>
                               <img
                                 className="h-10 w-10 rounded-full"
-                                src={`http://localhost:8000/${authUser.profilePicture}`}
+                                src={`${authUser.profilePicture}`}
                                 alt="Update profileImage"
                               />
                             </Menu.Button>
@@ -296,7 +296,7 @@ export default function Navbar() {
                       {authUser.profilePicture && (
                         <img
                           className="h-10 w-10 rounded-full"
-                          src={`http://localhost:8000/${authUser.profilePicture}`}
+                          src={`${authUser.profilePicture}`}
                           alt="Update profileImage"
                         />
                       )}

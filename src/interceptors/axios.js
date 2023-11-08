@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 //In this case, interceptors are being used to automatically refresh the user's access token when it has expired.
 //By using an interceptor, the process of refreshing the access token can be handled automatically without the need for the user to manually log in again, providing a better user experience.
 
-const jwtInterceptor = axios.create({});
+const jwtInterceptor = axios.create({
+  baseURL: "https://comer-experience-app-server.onrender.com", // Replace with your server's base URL
+  withCredentials: true, // Send cookies with every request
+});
 
 // Define a function to intercept responses from Axios requests.
 jwtInterceptor.interceptors.response.use(
@@ -12,13 +15,13 @@ jwtInterceptor.interceptors.response.use(
     return response;
   }, // If the response is successful, just return it without modifications.
   async (error) => {
-    let refresh = false; // Initialize a variable to keep track of whether a token refresh is in progress.
+    const originalRequest = error.config; // Initialize a variable to keep track of whether a token refresh is in progress.
     const navigate = useNavigate(); // Get the navigation function from react-router-dom.
 
     // Check if the error corresponds to a 401 Unauthorized status code and token refresh is not in progress.
-    if (error?.response?.status === 401 && !refresh) {
+    if (error.response.status === 401 && !originalRequest._retry) {
       try {
-        refresh = true; // Set the refresh flag to true to prevent multiple simultaneous refresh attempts.
+        originalRequest._retry = true; // Set the refresh flag to true to prevent multiple simultaneous refresh attempts.
 
         // Send a POST request to "/auth/refreshtoken" to refresh the access token.
         const response = await axios.post("/auth/refreshtoken", {
@@ -28,7 +31,8 @@ jwtInterceptor.interceptors.response.use(
 
         // If the token refresh is successful (status code 200), reattempt the original request.
         if (response.status === 200) {
-          return axios(error.config);
+          // Retry the original request
+          return jwtInterceptor(originalRequest);
           // This is a key part of the code that handles token refresh in the Axios interceptor
           // It is used to retry the original HTTP request after a successful token refresh.
           // error.config does contain enough information to recreate the original request.
@@ -50,7 +54,7 @@ jwtInterceptor.interceptors.response.use(
       }
     } else {
       // Handle other error responses (e.g., network errors or non-401 errors).
-      refresh = false; // Reset the refresh flag.
+      originalRequest._retry = false; // Reset the refresh flag.
       console.error("Error:", error);
 
       // Redirect the user to the login page.
@@ -62,4 +66,4 @@ jwtInterceptor.interceptors.response.use(
   }
 );
 
-export default jwtInterceptor
+export default jwtInterceptor;

@@ -121,7 +121,7 @@ export default function DetailedProduct() {
           {detailedProductData?.experience?.files?.length > 0 &&
             detailedProductData?.experience?.files.map((photo, index) => (
               <div key={index}>
-                <img src={`http://localhost:8000/${photo}`} alt="allImage" />
+                <img src={`${photo}`} alt="allImage" />
               </div>
             ))}
         </div>
@@ -167,7 +167,7 @@ export default function DetailedProduct() {
                 <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
                   <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
                     <img
-                      src={`http://localhost:8000/${detailedProductData.experience.files[0]}`}
+                      src={`${detailedProductData.experience.files[0]}`}
                       alt="productImage1"
                       className="h-full w-full object-cover object-center"
                     />
@@ -175,14 +175,14 @@ export default function DetailedProduct() {
                   <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
                     <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                       <img
-                        src={`http://localhost:8000/${detailedProductData.experience.files[1]}`}
+                        src={`${detailedProductData.experience.files[1]}`}
                         alt="productImage2"
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
                     <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                       <img
-                        src={`http://localhost:8000/${detailedProductData.experience.files[2]}`}
+                        src={`${detailedProductData.experience.files[2]}`}
                         alt="productImage3"
                         className="h-full w-full object-cover object-center"
                       />
@@ -190,7 +190,7 @@ export default function DetailedProduct() {
                   </div>
                   <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
                     <img
-                      src={`http://localhost:8000/${detailedProductData.experience.files[3]}`}
+                      src={`${detailedProductData.experience.files[3]}`}
                       alt="productImage4"
                       className="h-full w-full object-cover object-center"
                     />
@@ -252,7 +252,7 @@ export default function DetailedProduct() {
                             <div className="border-2 p-4 items-center rounded-md">
                               <div className="mb-4">
                                 <div className="flex text-xl font-bold">
-                                  {dateMaxGuestPair.date.split("T")[0]} 
+                                  {dateMaxGuestPair.date.split("T")[0]}
                                 </div>
                                 <div className="font-light">
                                   {dateMaxGuestPair.startTime} -{" "}
@@ -317,7 +317,7 @@ export default function DetailedProduct() {
                           {detailedProductData.owner.profilePicture ? (
                             <img
                               className="h-20 w-20 rounded-full"
-                              src={`http://localhost:8000/${detailedProductData.owner.profilePicture}`}
+                              src={`${detailedProductData.owner.profilePicture}`}
                               alt="profileImage"
                             />
                           ) : (

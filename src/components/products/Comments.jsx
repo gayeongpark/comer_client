@@ -57,7 +57,7 @@ export default function Comments({ experienceId }) {
       <div className="flex w-full items-center space-x-2">
         {authUser.profilePicture ? (
           <img
-            src={`http://localhost:8000/${authUser.profilePicture}`}
+            src={`${authUser.profilePicture}`}
             alt="Avatar"
             className="w-10 h-10 rounded-full items-center"
           />

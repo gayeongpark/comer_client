@@ -140,7 +140,7 @@ export default function Profile() {
                       className="flex h-full w-full text-gray-300"
                       src={
                         userProfile.profilePicture
-                          ? `http://localhost:8000/${userProfile.profilePicture}`
+                          ? `${userProfile.profilePicture}`
                           : "https://www.donut.app/assets/donut.png"
                       }
                     ></img>

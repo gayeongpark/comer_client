@@ -90,7 +90,7 @@ export default function Comment({ comment }) {
       {commentOwner?.profilePicture ? (
         <img
           className="w-12 h-12 rounded-full"
-          src={`http://localhost:8000/${commentOwner.profilePicture}`}
+          src={`${commentOwner.profilePicture}`}
           alt="avatar"
         />
       ) : (
