@@ -17,8 +17,8 @@ import { useSelector } from "react-redux";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const navigate = useNavigate(); // Get the navigation function for routing
 export default function Navbar() {
+  const navigate = useNavigate(); // Get the navigation function for routing
   const dispatch = useDispatch();
 
   // Get the authenticated user information from Redux state
