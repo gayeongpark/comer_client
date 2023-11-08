@@ -75,7 +75,7 @@ export default function BookingModal({
         {experienceData ? (
           <>
             <img
-              src={`http://localhost:8000/${experienceData.experience.files[0]}`}
+              src={`${experienceData.experience.files[0]}`}
               alt="coverImage"
               className="w-96 h-96 object-cover rounded-tl-md rounded-bl-md"
             />

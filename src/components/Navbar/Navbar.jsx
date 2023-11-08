@@ -36,7 +36,7 @@ export default function Navbar() {
         // Update the Redux state to indicate the user is no longer authenticated
         dispatch(setAuthUser(loggedOut));
         // Redirect the user to the login page
-        window.location.href = "http://localhost:3000/login";
+        window.location.href = "https://comer-experience-app.onrender.com/login";
       }
     } catch (error) {
       // If logout fails, update the Redux state accordingly
