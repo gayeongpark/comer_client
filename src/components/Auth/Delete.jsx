@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "../../redux/authSlice";
@@ -24,7 +25,7 @@ export default function Delete() {
       setMessage(response.data.message); // Update the "message" state with the response data
       dispatch(setAuthUser(response)); // Dispatch an action to update the authenticated user in Redux state
       setTimeout(() => {
-        window.location.href = "https://comer-experience-app.onrender.com/signup";
+        navigate("/signup");
       }, 3000); // User will be redirected after 3 seconds
       // window.location.href is used for full page navigation, while useNavigation is used for client-side navigation within a single-page application to change the content without fully reloading the page.
       // The reason I choose to use full page navigation is that I need to reset the state and make user logged out.
