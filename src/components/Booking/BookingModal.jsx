@@ -60,6 +60,7 @@ export default function BookingModal({
         },
         {
           headers: { "content-Type": "application/json" },
+          withCredentials: true,
         }
       );
       if (response.status === 200) {
