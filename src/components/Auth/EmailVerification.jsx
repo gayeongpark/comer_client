@@ -19,11 +19,7 @@ export default function EmailVerification() {
       try {
         // Send a GET request to the server to verify the email with the provided token
         const emailVerifiedData = await jwtInterceptor.get(
-          `/auth/verifyEmail/${token}`,
-          {
-            headers: { "content-Type": "application/json" },
-            withCredentials: true,
-          }
+          `/auth/verifyEmail/${token}`
         );
         // Extract the verified user data from the response
         const verifiedUserData = emailVerifiedData.data;
