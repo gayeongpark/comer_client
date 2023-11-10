@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import jwtInterceptor from "../../interceptors/axios";
+// import jwtInterceptor from "../../interceptors/axios";
+import axios from "axios";
 
 // This is the component that will be executed, when user verified the email clicking the provided url
 export default function EmailVerification() {
@@ -18,7 +19,7 @@ export default function EmailVerification() {
     const fetchEmailVerifiedData = async () => {
       try {
         // Send a GET request to the server to verify the email with the provided token
-        const emailVerifiedData = await jwtInterceptor.get(
+        const emailVerifiedData = await axios.get(
           `/auth/verifyEmail/${token}`
         );
         // Extract the verified user data from the response

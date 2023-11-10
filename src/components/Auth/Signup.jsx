@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
-import jwtInterceptor from "../../interceptors/axios"; // Call the axios interceptor to refresh the access token
+// import jwtInterceptor from "../../interceptors/axios"; // Call the axios interceptor to refresh the access token
 import { useForm } from "react-hook-form"; // I used library to validate the form
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
+import axios from "axios";
 
 // Sign up component for sign up page
 export default function Signup() {
@@ -56,7 +57,7 @@ export default function Signup() {
 
     try {
       // Send a POST request to the server to sign up the user
-      await jwtInterceptor.post("/auth/signup", user, {
+      await axios.post("/auth/signup", user, {
         headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
