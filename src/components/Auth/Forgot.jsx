@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
-import jwtInterceptor from "../../interceptors/axios";
+// import jwtInterceptor from "../../interceptors/axios";
 
 // If user forgot password, and clicks the forgot passowrd btn.
 // User will be directed to this forgot password page.
@@ -14,7 +15,7 @@ export default function Forgot() {
     event.preventDefault(); // To avoid the reload of the page
     try {
       // Send a POST request to the server to initiate the password reset process
-      await jwtInterceptor.post(
+      await axios.post(
         "/auth/forgotPassword",
         { email }, // This is the req.body
         {
