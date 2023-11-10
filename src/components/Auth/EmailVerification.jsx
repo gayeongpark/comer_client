@@ -20,7 +20,11 @@ export default function EmailVerification() {
       try {
         // Send a GET request to the server to verify the email with the provided token
         const emailVerifiedData = await axios.get(
-          `https://comer-experience-app-server.onrender.com/auth/verifyEmail/${token}`
+          `https://comer-experience-app-server.onrender.com/auth/verifyEmail/${token}`,
+          {
+            headers: { "content-Type": "application/json" },
+            withCredentials: true,
+          }
         );
         // Extract the verified user data from the response
         const verifiedUserData = emailVerifiedData.data;

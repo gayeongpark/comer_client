@@ -23,7 +23,7 @@ export default function App() {
       <Route path="/login" element={<AuthLogIn />} />
       <Route path="/forgotPassword" element={<ForgotPassword />} />
       <Route path="/resetPassword/:token" element={<ResetPassword />} />
-      <Route path="/emailVerification/:token" element={<VertifiecEmail />} />
+      <Route path="https://comer-experience-app.onrender.com/emailVerification/:token" element={<VertifiecEmail />} />
       <Route path="/yourProfile/:id/delete" element={<DeleteUser />} />
       <Route path="/hostingExperience" element={<Hosting />} />
       <Route path="/product/:id" element={<Product />} />

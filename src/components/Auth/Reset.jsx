@@ -1,9 +1,10 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import jwtInterceptor from "../../interceptors/axios"; // Call the intercetor to refresh the access token
+// import jwtInterceptor from "../../interceptors/axios"; // Call the intercetor to refresh the access token
 
 export default function Reset() {
   const navigate = useNavigate(); // Call useNavigation
@@ -38,10 +39,14 @@ export default function Reset() {
     };
     try {
       // Send a POST request with password reset object data
-      await jwtInterceptor.post("/auth/resetPassword", response, {
-        headers: { "content-Type": "application/json" },
-        withCredentials: true,
-      });
+      await axios.post(
+        "https://comer-experience-app-server.onrender.com/auth/resetPassword",
+        response,
+        {
+          headers: { "content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
       // Display a success message and navigate to the login page after a delay
       setSuccessMessage(
         "The password has been successfully reset. Please hold on..."

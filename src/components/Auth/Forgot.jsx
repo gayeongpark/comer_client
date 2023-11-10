@@ -16,7 +16,7 @@ export default function Forgot() {
     try {
       // Send a POST request to the server to initiate the password reset process
       await axios.post(
-        "/auth/forgotPassword",
+        "https://comer-experience-app-server.onrender.com/auth/forgotPassword",
         { email }, // This is the req.body
         {
           headers: { "content-Type": "application/json" },
