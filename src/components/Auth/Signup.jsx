@@ -68,7 +68,7 @@ export default function Signup() {
       // If this request is success, It will navigate user to login page after 2 seconds
       setTimeout(() => {
         navigate("/login");
-      }, 2000);
+      }, 5000);
     } catch (error) {
       // Display an error message from the server if the sign-up request fails
       setError(error.response.data.error);
