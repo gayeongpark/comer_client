@@ -57,7 +57,7 @@ export default function Signup() {
 
     try {
       // Send a POST request to the server to sign up the user
-      await axios.post("/auth/signup", user, {
+      await axios.post("https://comer-experience-app-server.onrender.com/auth/signup", user, {
         headers: { "content-Type": "application/json" },
         withCredentials: true,
       });
