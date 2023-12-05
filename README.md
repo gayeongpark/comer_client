@@ -1,6 +1,6 @@
 # Comer - Connecting Cultures Through Food
 
-"Comer," a web application, is GAYEONG's innovative project for the Web Development Basics with JavaScript course at QUEST program, CODE University of Applied Sciences. The platform bridges cultures through the love of food, enabling users to share and book unique culinary experiences.
+"Comer," a web application, is LANTANA's innovative project for the Web Development Basics with JavaScript course at QUEST program, CODE University of Applied Sciences. The platform bridges cultures through the love of food, enabling users to share and book unique culinary experiences.
 
 **Deployed URL**: [Comer Experience Web](https://comer-experience-app.onrender.com)
 
