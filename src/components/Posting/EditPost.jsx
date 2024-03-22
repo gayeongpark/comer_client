@@ -491,10 +491,10 @@ export default function EditPost({ postId }) {
     }
   };
 
-  const handleUpdateAvailiability = async () => {
+  const handleUpdateAvailability = async () => {
     try {
       const response = await jwtInterceptor.put(
-        `/experiences/${postId}/updateAvailiability`,
+        `/experiences/${postId}/updateAvailability`,
         {
           startTime,
           endTime,
@@ -510,7 +510,7 @@ export default function EditPost({ postId }) {
       );
 
       if (response.status === 200) {
-        setSuccessUpdateAvailability("Availiability are updated successfully"); // Provide user feedback
+        setSuccessUpdateAvailability("Availability are updated successfully"); // Provide user feedback
         setError("");
       } else {
         setError("Failed to update cancellation fields"); // Handle errors appropriately
@@ -1163,7 +1163,7 @@ export default function EditPost({ postId }) {
             )}
           </div>
 
-          {/* General availiability */}
+          {/* General availability */}
           <div className="px-4 py-10 border-b sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">
               General availability
@@ -1348,7 +1348,7 @@ export default function EditPost({ postId }) {
               <div className="flex items-center space-x-4 mt-4">
                 <button
                   type="submit"
-                  onClick={handleUpdateAvailiability}
+                  onClick={handleUpdateAvailability}
                   className="flex-inline rounded-md border border-transparent bg-red-700 px-6 py-2 text-md font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 >
                   Save
