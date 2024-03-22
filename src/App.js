@@ -8,7 +8,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyProfile from "./pages/MyProfile";
 import Hosting from "./pages/HostingExperience";
-import VertifiecEmail from "./pages/VertifiecEmail";
+import VerifiedEmail from "./pages/VerifiedEmail";
 import DeleteUser from "./pages/DeleteUser";
 import MyExperience from "./pages/MyExperience";
 import EditProduct from "./pages/EditProduct";
@@ -23,7 +23,7 @@ export default function App() {
       <Route path="/login" element={<AuthLogIn />} />
       <Route path="/forgotPassword" element={<ForgotPassword />} />
       <Route path="/resetPassword/:token" element={<ResetPassword />} />
-      <Route path="/emailVerification/:token" element={<VertifiecEmail />} />
+      <Route path="/emailVerification/:token" element={<VerifiedEmail />} />
       <Route path="/yourProfile/:id/delete" element={<DeleteUser />} />
       <Route path="/hostingExperience" element={<Hosting />} />
       <Route path="/product/:id" element={<Product />} />
