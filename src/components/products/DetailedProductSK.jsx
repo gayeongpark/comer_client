@@ -1,6 +1,6 @@
 import React from "react";
-import { MdLocationOn, MdOutlinePets, FaBaby, BsHeart, BsPeopleFill, GiForkKnifeSpoon, GiSodaCan, GiCookingPot, BiDrink } from "react-icons/all";
-
+// This is the component for the detailedProduct component
+// It should be updated
 export default function DetailedProductSK() {
   return (
     <div className="animate-pulse">
@@ -9,10 +9,10 @@ export default function DetailedProductSK() {
         <h1 className="bg-gray-400 h-12 rounded-md"></h1>
         <div className="flex justify-between mt-4">
           <div className="flex items-center gap-2">
-            <MdLocationOn className="text-gray-500" />
+            {/* <MdLocationOn className="text-gray-500" /> */}
             <div className="bg-gray-300 h-4 w-24 rounded-md"></div>
           </div>
-          <BsHeart className="text-gray-500" />
+          {/* <BsHeart className="text-gray-500" /> */}
         </div>
 
         {/* Image gallery placeholder */}
@@ -39,20 +39,20 @@ export default function DetailedProductSK() {
         <div className="mt-6">
           <h3 className="bg-gray-400 h-6 rounded-md w-1/4 mb-2"></h3>
           <div className="flex gap-4">
-            <GiForkKnifeSpoon className="text-gray-400" />
+            {/* <GiForkKnifeSpoon className="text-gray-400" />
             <GiSodaCan className="text-gray-400" />
             <GiCookingPot className="text-gray-400" />
-            <BiDrink className="text-gray-400" />
+            <BiDrink className="text-gray-400" /> */}
           </div>
         </div>
 
         {/* Location and Things to know placeholders */}
         <div className="mt-6">
-          <MdLocationOn className="text-gray-400" />
+          {/* <MdLocationOn className="text-gray-400" /> */}
           <div className="bg-gray-300 h-4 w-3/4 rounded-md my-2"></div>
-          <FaBaby className="text-gray-400" />
+          {/* <FaBaby className="text-gray-400" />
           <MdOutlinePets className="text-gray-400" />
-          <BsPeopleFill className="text-gray-400" />
+          <BsPeopleFill className="text-gray-400" /> */}
         </div>
 
         {/* Comments placeholder */}
