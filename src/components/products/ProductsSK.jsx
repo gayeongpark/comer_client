@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BsHeartFill } from "react-icons/bs";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+// import { BsHeartFill } from "react-icons/bs";
+// import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 // Skeleton component for the Products
 export default function ProductsSK() {
@@ -18,15 +18,15 @@ export default function ProductsSK() {
               {/* Placeholder buttons for image navigation */}
               <div className="absolute inset-0 flex justify-between items-center px-3 py-2">
                 <button className="opacity-0 group-hover:opacity-100">
-                  <AiOutlineLeft className="text-xl text-red-700" />
+                  {/* <AiOutlineLeft className="text-xl text-red-700" /> */}
                 </button>
                 <button className="opacity-0 group-hover:opacity-100">
-                  <AiOutlineRight className="text-xl text-red-700" />
+                  {/* <AiOutlineRight className="text-xl text-red-700" /> */}
                 </button>
               </div>
               {/* Placeholder for like button */}
               <div className="absolute right-0 top-0 p-2">
-                <BsHeartFill className="text-3xl text-red-700 animate-pulse" />
+                {/* <BsHeartFill className="text-3xl text-red-700 animate-pulse" /> */}
               </div>
             </div>
             <Link to="#">
