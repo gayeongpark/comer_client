@@ -1004,7 +1004,7 @@ export default function Posting() {
                   htmlFor="country"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  country
+                  Country
                 </label>
                 <input
                   type="text"
