@@ -110,7 +110,7 @@ export default function Header() {
                   </label>
                   <span
                     onClick={() => setOpenOptions(!openOptions)}
-                    // If user opens the span section, the options will be opended
+                    // If user opens the span section, the options will be open
                     className="text-gray-400 cursor-pointer"
                   >{`${options.adults} adult · ${options.children} children`}</span>
                   {openOptions && (

@@ -33,7 +33,7 @@ export default function Posting() {
     { value: "English", label: "English" },
     { value: "Korean", label: "Korean" },
     { value: "Spanish", label: "Spanish" },
-    { value: "Franch", label: "Franch" },
+    { value: "French", label: "French" },
     { value: "Chinese", label: "Chinese" },
   ];
 
@@ -296,7 +296,7 @@ export default function Posting() {
                   Title
                 </label>
                 <div className="text-gray-500">
-                  please input the catched title of your activity
+                  please input the title of your activity
                 </div>
                 <input
                   type="text"
@@ -508,7 +508,7 @@ export default function Posting() {
               <br />
               {petsAllowed && "Guest can bring their pets"}
               <br />
-              {maxGuest && `Maximun group size: ${maxGuest} persons`}
+              {maxGuest && `Maximum group size: ${maxGuest} persons`}
             </dd>
 
             <div
