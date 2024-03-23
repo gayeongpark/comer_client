@@ -243,8 +243,12 @@ export default function DetailedProduct() {
                 <div>
                   <div className="mt-6">
                     <div className="flex flex-wrap justify-between gap-4 mt-3">
-                      {detailedProductData?.availability[0]?.dateMaxGuestPairs.map(
-                        (dateMaxGuestPair, index) => (
+                      {detailedProductData?.availability[0]?.dateMaxGuestPairs
+                        .filter(
+                          (dateMaxGuestPair) =>
+                            new Date(dateMaxGuestPair.date) > new Date()
+                        )
+                        .map((dateMaxGuestPair, index) => (
                           <div className="flex-auto" key={index}>
                             <div className="border-2 p-4 items-center rounded-md">
                               <div className="mb-4">
@@ -297,8 +301,7 @@ export default function DetailedProduct() {
                               </div>
                             </div>
                           </div>
-                        )
-                      )}
+                        ))}
                     </div>
                   </div>
                 </div>
