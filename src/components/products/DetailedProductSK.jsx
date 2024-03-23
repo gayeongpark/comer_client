@@ -6,7 +6,7 @@ export default function DetailedProductSK() {
     <div className="animate-pulse">
       <div className="mx-auto mt-6 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         {/* Title and location placeholders */}
-        <h1 className="bg-gray-400 h-12 rounded-md"></h1>
+        {/* <h1 className="bg-gray-400 h-12 rounded-md"></h1> */}
         <div className="flex justify-between mt-4">
           <div className="flex items-center gap-2">
             {/* <MdLocationOn className="text-gray-500" /> */}
@@ -37,7 +37,7 @@ export default function DetailedProductSK() {
 
         {/* Perks placeholders */}
         <div className="mt-6">
-          <h3 className="bg-gray-400 h-6 rounded-md w-1/4 mb-2"></h3>
+          {/* <h3 className="bg-gray-400 h-6 rounded-md w-1/4 mb-2"></h3> */}
           <div className="flex gap-4">
             {/* <GiForkKnifeSpoon className="text-gray-400" />
             <GiSodaCan className="text-gray-400" />
@@ -57,7 +57,7 @@ export default function DetailedProductSK() {
 
         {/* Comments placeholder */}
         <div className="mt-6">
-          <h3 className="bg-gray-400 h-6 rounded-md w-1/4 mb-2"></h3>
+          {/* <h3 className="bg-gray-400 h-6 rounded-md w-1/4 mb-2"></h3> */}
           <div className="bg-gray-300 h-12 rounded-lg"></div>
         </div>
       </div>

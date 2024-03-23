@@ -13,6 +13,7 @@ import DeleteUser from "./pages/DeleteUser";
 import MyExperience from "./pages/MyExperience";
 import EditProduct from "./pages/EditProduct";
 import BookedExperiences from "./pages/BookedExperiences";
+import SearchResults from "./pages/SearchResults";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
       <Route path="/myExperience/:id" element={<MyExperience />} />
       <Route path="/myExperience/edit" element={<EditProduct />} />
       <Route path="/bookedExperience/:userId" element={<BookedExperiences />} />
+      <Route path="/searchExperience/:cityName" element={<SearchResults />} />
     </Routes>
   );
 }
