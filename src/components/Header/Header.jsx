@@ -51,8 +51,8 @@ export default function Header() {
       dates: date[0],
       // options,
     }); // Log the captured data
-    navigate("/searchExperience/:cityName", {
-      state: { cityName, dates: date[0] },
+    navigate("/searchExperience/" + cityName, {
+      state: { startDate: date[0].startDate, endDate: date[0].endDate },
     }); // Programmatically navigate with state
   };
 
