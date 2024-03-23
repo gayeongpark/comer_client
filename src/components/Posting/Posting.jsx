@@ -35,6 +35,8 @@ export default function Posting() {
     { value: "Spanish", label: "Spanish" },
     { value: "French", label: "French" },
     { value: "Chinese", label: "Chinese" },
+    { value: "German", label: "German" },
+    { value: "Japanese", label: "Japanese" },
   ];
 
   const customStyles = {

@@ -206,7 +206,7 @@ export default function Signup() {
           </div>
           <div className="mx-auto max-w-2xl text-center">
             <p className="mt-8 text-md leading-8 text-gray-600">
-              Alreay have an account?{" "}
+              Already have an account?{" "}
               <Link to="/login">
                 <button>Log in</button>
               </Link>

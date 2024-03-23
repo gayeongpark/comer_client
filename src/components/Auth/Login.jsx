@@ -12,8 +12,7 @@ export default function Login() {
   const [open, setOpen] = useState(false); // Used to toggle password visibility
 
   const [email, setEmail] = useState("");
-  const [password, setPassowrd] = useState("");
-
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate(); // Get the navigation function for routing
@@ -39,15 +38,28 @@ export default function Login() {
       });
       // Save the response data into user variable
       const user = response.data;
-      // console.log(user);
       // Dispatch an action to update the user's authentication status in Redux
       dispatch(setAuthUser(user));
-      //coverting setAuthUser(false) into (true)
+      //converting setAuthUser(false) into (true)
       // authUser(user);
       //containing user in authUser selector
       navigate("/"); // Redirect the user to the homepage
     } catch (error) {
-      setError(error.response.data);
+      // Handle different types of errors
+      let errorMessage =
+        "An unexpected error occurred. Please try again later.";
+
+      // Check if the error response exists and contains a data field with an error message
+      if (error.response && error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        // Fallback to a more generic error message from the error object
+        errorMessage = error.message;
+      }
+
+      // Set the error state to the determined error message
+      setError(errorMessage);
+
       // Dispatch an action to update the user's authentication status to false in Redux
       dispatch(setAuthUser(false));
     }
@@ -102,7 +114,7 @@ export default function Login() {
                 name="password"
                 id="password"
                 autoComplete="off"
-                onChange={(e) => setPassowrd(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-700"
                 required
               />
@@ -114,6 +126,11 @@ export default function Login() {
                 )}
               </div>
             </div>
+            {error && (
+              <div className="mt-2 text-md font-medium text-red-700">
+                {error}
+              </div>
+            )}
           </div>
         </div>
         <div className="mt-10">

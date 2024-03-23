@@ -4,7 +4,7 @@ import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-// import jwtInterceptor from "../../interceptors/axios"; // Call the intercetor to refresh the access token
+// import jwtInterceptor from "../../interceptors/axios"; // Call the interceptor to refresh the access token
 
 export default function Reset() {
   const navigate = useNavigate(); // Call useNavigation

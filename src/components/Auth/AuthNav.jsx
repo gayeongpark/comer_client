@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 
-// This is the navigation component of the login, signup and forgotpassword and resetpassword pages.
+// This is the navigation component of the login, signup and forgot password and reset password pages.
 export default function AuthNav() {
   return (
     <nav className="flex justify-between h-14 min-h-full border-b-2 px-1 sm:px-6 lg:px-8">

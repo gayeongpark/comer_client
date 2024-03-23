@@ -79,6 +79,6 @@ npm run eject
 ### Planned Enhancements
 
 - Messaging and search features using socket IO.
-- Social login/signup options using Firebase.
+- Social login/signUp options using Firebase.
 - Enhanced security measures.
 - Expanded platform functionality and reach.

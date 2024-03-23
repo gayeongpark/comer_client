@@ -79,7 +79,7 @@ export default function BookedExperience() {
           {/* Maps through the bookings array to display booking information for the authenticated user.  */}
           {bookings.map((bookingGroup, groupIndex) => (
             <article key={groupIndex}>
-              {/* The reason why I maped twice is that booking slot data is located in bookings.booking */}
+              {/* The reason why I mapped twice is that booking slot data is located in bookings.booking */}
               {bookingGroup.booking
                 .filter((booking) => booking.userEmail === authUser.email) // Filter bookings for the authenticated user
                 .map((booking, index) => (

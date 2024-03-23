@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 // import jwtInterceptor from "../../interceptors/axios";
 
-// If user forgot password, and clicks the forgot passowrd btn.
+// If user forgot password, and clicks the forgot password btn.
 // User will be directed to this forgot password page.
 // This is the component for the forgot password page.
 export default function Forgot() {

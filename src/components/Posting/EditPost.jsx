@@ -49,8 +49,10 @@ export default function EditPost({ postId }) {
     { value: "English", label: "English" },
     { value: "Korean", label: "Korean" },
     { value: "Spanish", label: "Spanish" },
-    { value: "Franch", label: "Franch" },
+    { value: "French", label: "French" },
     { value: "Chinese", label: "Chinese" },
+    { value: "German", label: "German" },
+    { value: "Japanese", label: "Japanese" },
   ];
 
   const customStyles = {
@@ -643,7 +645,7 @@ export default function EditPost({ postId }) {
                   Title
                 </label>
                 <div className="text-gray-500">
-                  please input the catched title of your activity
+                  please input the title of your activity
                 </div>
                 <input
                   type="text"
