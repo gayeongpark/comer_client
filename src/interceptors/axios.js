@@ -4,9 +4,9 @@ import axios from "axios";
 //By using an interceptor, the process of refreshing the access token can be handled automatically without the need for the user to manually log in again, providing a better user experience.
 
 const jwtInterceptor = axios.create({
-  baseURL: 
-  // "http://localhost:8000",
-  "https://comer-experience-app-server.onrender.com", // Replace with your server's base URL
+  baseURL:
+    // "http://localhost:8000",
+    "https://comer-experience-app-server.onrender.com", // Replace with your server's base URL
   withCredentials: true, // Send cookies with every request
 });
 
