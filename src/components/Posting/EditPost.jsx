@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { DateRangePicker } from "react-date-range";
 import { MdOutlineCancel } from "react-icons/md";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { AddressAutofill, AddressMinimap } from "@mapbox/search-js-react";
 import jwtInterceptor from "../../interceptors/axios";
 import Select from "react-select";
@@ -1175,10 +1175,10 @@ export default function EditPost({ postId }) {
               {(experienceInformation?.experience?.startDate ||
                 experienceInformation?.experience?.endDate) &&
                 `Date: ${format(
-                  parseISO(experienceInformation?.experience?.startDate),
+                  experienceInformation?.experience?.startDate.split("T")[0],
                   "MM/dd/yyyy"
                 )} to ${format(
-                  parseISO(experienceInformation?.experience?.endDate),
+                  experienceInformation?.experience?.endDate.split("T")[0],
                   "MM/dd/yyyy"
                 )}`}
               <br />
