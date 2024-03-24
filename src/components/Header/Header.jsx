@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { FaSearchLocation } from "react-icons/fa";
-import { FaCalendarDay } from "react-icons/fa";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css files
-import { DateRangePicker } from "react-date-range";
-import { format } from "date-fns";
+// import { AddressAutofill } from "@mapbox/search-js-react";
+
+// import { FaCalendarDay } from "react-icons/fa";
+// import "react-date-range/dist/styles.css"; // main style file
+// import "react-date-range/dist/theme/default.css"; // theme css files
+// import { DateRangePicker } from "react-date-range";
+// import { format } from "date-fns";
 
 export default function Header() {
-  const [openDate, setOpenDate] = useState(false); // State to manage date picker visibility
+  // const [openDate, setOpenDate] = useState(false); // State to manage date picker visibility
   // const [openOptions, setOpenOptions] = useState(false); // State to manage options dropdown visibility
   const [cityName, setCityName] = useState("");
   const navigate = useNavigate();
@@ -18,13 +20,13 @@ export default function Header() {
   //   children: 0,
   // });
   // State to manage the number of adults and children
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]); // State to manage selected date range
+  // const [date, setDate] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //     key: "selection",
+  //   },
+  // ]); // State to manage selected date range
   // The object represents the initial date range selection with two properties
 
   // // Define a function to handle changes in the number of adults or children
@@ -46,22 +48,35 @@ export default function Header() {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
-    console.log("Submitting form with data:", {
-      cityName,
-      dates: date[0],
-      // options,
-    }); // Log the captured data
-    navigate("/searchExperience/" + cityName, {
-      state: { startDate: date[0].startDate, endDate: date[0].endDate },
-    }); // Programmatically navigate with state
+    // Check if cityName needs transformation
+    const needsTransformation =
+      cityName !==
+      cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+
+    // Apply transformation if needed
+    const transformedCityName = needsTransformation
+      ? cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase()
+      : cityName;
+    // console.log("Submitting form with data:", {
+    //   cityName: transformedCityName,
+    //   // dates: date[0],
+    //   // options,
+    // }); // Log the captured data
+    navigate(
+      "/searchExperience/" + transformedCityName
+      // {
+      //   startDate: format(date[0].startDate, "yyyy-MM-dd"),
+      //   endDate: format(date[0].endDate, "yyyy-MM-dd"),
+      // }
+    ); // Programmatically navigate with state
   };
 
   return (
     <header className="relative bg-white">
-      <section className="pt-20 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
+      <section className="pt-20 pb-50 sm:pt-24 sm:pb-30 lg:pt-40 lg:pb-40">
         <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
           <div className="sm:max-w-lg">
-            <h1 className="font text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="font text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
               Enjoy foods and explore cultures
             </h1>
             <p className="mt-4 text-xl text-gray-500">
@@ -72,22 +87,28 @@ export default function Header() {
           <div>
             <div className="mt-10">
               <form
-                className="flex relative justify-between px-2 pl-7 py-1 items-center text-center w-4/5 h-auto shadow-md shadow-gray-400 bg-white border rounded-full sm:text-xs"
+                className="flex w-full mx-auto px-4 py-2 bg-white border rounded-full shadow-md text-gray-700"
                 onSubmit={handleSubmit}
               >
-                <section className="flex text-lg items-center gap-0.3">
+                <div className="flex flex-grow items-center">
                   <label htmlFor="locationInput" className="text-gray-300">
-                    <FaSearchLocation />
+                    <FaSearchLocation className="font-bold text-xl" />
                   </label>
+                  {/* <AddressAutofill
+                    accessToken={process.env.REACT_APP_MAPBOXAPIKEY}
+                  > */}
                   <input
                     type="text"
+                    name="city"
+                    // autocomplete="address-level2"
                     placeholder="Please input city name"
-                    className="border-none outline-none sm:placeholder-opacity-25 focus:border-none focus:outline-none focus:ring-0"
+                    className="flex-1 ml-3 text-lg py-2 text-gray-700 placeholder-gray-500 border-none outline-none focus:ring-0 rounded"
                     value={cityName}
                     onChange={(e) => setCityName(e.target.value)}
                   />
-                </section>
-                <div className="border-l border-gray-300"></div>
+                  {/* </AddressAutofill> */}
+                </div>
+                {/* <div className="border-l border-gray-300"></div>
                 <section className="flex text-lg items-center gap-1.5">
                   <label htmlFor="dateInput" className="text-gray-300">
                     <FaCalendarDay />
@@ -95,12 +116,12 @@ export default function Header() {
                   <span
                     onClick={() => setOpenDate(!openDate)}
                     className="text-gray-400 cursor-pointer"
-                  >
-                    {`${format(date[0].startDate, "MM/dd/yyyy")} to 
-                    ${format(date[0].endDate, "MM/dd/yyyy")}`}
-                    {/* The format function is used to format the date objects into a readable string representation. */}
-                  </span>
-                  {openDate && (
+                  > */}
+                {/* {`${format(date[0].startDate, "yyyy-MM-dd")} to 
+  ${format(date[0].endDate, "yyyy-MM-dd")}`} */}
+                {/* The format function is used to format the date objects into a readable string representation. */}
+                {/* </span> */}
+                {/* {openDate && (
                     <div className="z-40">
                       <DateRangePicker
                         rangeColors={["#b91c1c"]}
@@ -117,11 +138,11 @@ export default function Header() {
                         className="absolute top-16"
                       />
                     </div>
-                  )}
-                </section>
+                  )} */}
+                {/* </section> */}
                 <button
                   type="submit"
-                  className="flex bg-red-700 p-4 flex-row-reverse rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2"
+                  className="ml-3 p-4 bg-red-600 text-white rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2"
                 >
                   <GoSearch className="text-white font-bold text-xl" />
                 </button>
