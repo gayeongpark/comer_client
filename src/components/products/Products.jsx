@@ -5,14 +5,11 @@ import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import ProductsSK from "./ProductsSK";
-import { useSelector } from "react-redux";
 
 export default function Products() {
   // Define a state variable "newProductData" and its updater function "setNewProductData"
   const [newProductData, setNewProductData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const authUser = useSelector((state) => state.authUser.value);
-
   // Function to handle sliding images left or right
   // It takes two parameters direction and index
   // direction is a string that specifies the direction of the slid(l: left, r: right)
@@ -148,8 +145,7 @@ export default function Products() {
                             className="flex absolute justify-end mt-2 mr-5 text-3xl text-red-700"
                             onClick={() => handleLikes(product._id)}
                           >
-                            {product.isLiked ||
-                            product.likes.includes(authUser.id) ? (
+                            {product.isLiked ? (
                               <BsHeartFill />
                             ) : (
                               <BsHeartFill className="text-white" />
